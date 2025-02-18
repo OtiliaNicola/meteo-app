@@ -1,13 +1,71 @@
-<ion-header [translucent]="true">
+<ion-header class="app-layout__header ion-no-border">
   <ion-toolbar>
-    <ion-title>feedback</ion-title>
+    <ion-buttons slot="start">
+      <ion-button>
+        <ion-icon name="arrow-back" color="white"></ion-icon>
+        <!-- <ion-back-button defaultHref="/tabs/home"></ion-back-button> -->
+      </ion-button>
+    </ion-buttons>
+    <ion-title color="white">Feedback</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">feedback</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content [fullscreen]="true" class="app-layout__content">
+  <div class="feedback-header">
+    <h2>Your feedback can help everyone see more accurate weather conditions!</h2>
+  </div>
+
+  <div class="weather-conditions">
+    <div class="condition-row">
+      <div class="condition-card">
+        <div class="condition-content">
+          <img src="assets/icons/icon-sunny-weather.svg" alt="sunny" class="condition-icon"/>
+        </div>
+        <span>Sunny</span>
+      </div>
+
+      <div class="condition-card">
+        <div class="condition-content">
+          <img src="assets/icons/icon-cloudy.svg" alt="cloudy" class="condition-icon"/>
+        </div>
+        <span>Cloudy</span>
+      </div>
+
+      <div class="condition-card">
+        <div class="condition-content">
+          <img src="assets/icons/icon-rain-weather.svg" alt="rain" class="condition-icon"/>
+        </div>
+        <span>Rain</span>
+      </div>
+    </div>
+
+    <div class="condition-row">
+      <div class="condition-card">
+        <div class="condition-content">
+          <img src="assets/icons/icon-snow-weather.svg" alt="snow" class="condition-icon"/>
+        </div>
+        <span>Snow</span>
+      </div>
+
+      <div class="condition-card">
+        <div class="condition-content">
+          <img src="assets/icons/icon-storm-weather.svg" alt="storm" class="condition-icon"/>
+        </div>
+        <span>Storm</span>
+      </div>
+
+      <div class="condition-card">
+        <div class="condition-content">
+          <img src="assets/icons/icon-thunder-weather.svg" alt="thunder" class="condition-icon"/>
+        </div>
+        <span>Thunder</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="submit-section">
+    <ion-button expand="block" class="submit-button">
+      Submit
+    </ion-button>
+  </div>
 </ion-content>
