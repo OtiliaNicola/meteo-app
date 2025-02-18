@@ -1,0 +1,86 @@
+ion-toolbar {
+  --padding-start: 15px;
+  --padding-end: 15px;
+}
+
+ion-buttons {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 5px;
+}
+  .notifications-list {
+    .notification-card {
+      --background: rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      margin-bottom: 16px;
+  
+      .notification-content {
+        padding: 16px;
+        display: flex;
+        align-items: flex-start;
+        gap: 16px;
+  
+        .notification-icon {
+          padding: 12px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+  
+          ion-icon {
+            font-size: 24px;
+          }
+  
+          &.warning {
+            background: rgba(255, 152, 0, 0.2);
+            color: #FFA000;
+          }
+  
+          &.info {
+            background: rgba(33, 150, 243, 0.2);
+            color: #2196F3;
+          }
+  
+          &.alert {
+            background: rgba(244, 67, 54, 0.2);
+            color: #F44336;
+          }
+        }
+  
+        .notification-text {
+          flex: 1;
+  
+          h3 {
+            margin: 0;
+            font-size: 16px;
+            font-weight: 500;
+            color: white;
+          }
+  
+          p {
+            margin: 4px 0;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+          }
+  
+          .time {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.5);
+          }
+        }
+      }
+  
+      &.unread {
+        --background: rgba(255, 255, 255, 0.15);
+  
+        .notification-text h3::after {
+          content: '';
+          display: inline-block;
+          width: 8px;
+          height: 8px;
+          background: #4CAF50;
+          border-radius: 50%;
+          margin-left: 8px;
+        }
+      }
+    }
+  }

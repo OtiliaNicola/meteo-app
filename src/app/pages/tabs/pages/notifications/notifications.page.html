@@ -1,13 +1,57 @@
-<ion-header [translucent]="true">
+<ion-header class="app-layout__header ion-no-border">
   <ion-toolbar>
-    <ion-title>notifications</ion-title>
+    <ion-buttons slot="start">
+      <ion-button>
+        <ion-icon name="arrow-back" color="white"></ion-icon>
+        <!-- <ion-back-button defaultHref="/tabs/home"></ion-back-button> -->
+      </ion-button>
+    </ion-buttons>
+    <ion-title color="white">Notifications</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">notifications</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content [fullscreen]="true" class="app-layout__content">
+  <div class="notifications-list">
+    <!-- Notificación con icono de advertencia -->
+    <ion-card class="notification-card">
+      <div class="notification-content">
+        <div class="notification-icon warning">
+          <ion-icon name="warning-outline"></ion-icon>
+        </div>
+        <div class="notification-text">
+          <h3>Heavy Rain Alert</h3>
+          <p>Heavy rain expected in your area in the next few hours</p>
+          <span class="time">2 hours ago</span>
+        </div>
+      </div>
+    </ion-card>
+
+    <!-- Notificación con icono de información -->
+    <ion-card class="notification-card">
+      <div class="notification-content">
+        <div class="notification-icon info">
+          <ion-icon name="information-circle-outline"></ion-icon>
+        </div>
+        <div class="notification-text">
+          <h3>Temperature Drop</h3>
+          <p>Temperature will drop by 5°C tonight</p>
+          <span class="time">5 hours ago</span>
+        </div>
+      </div>
+    </ion-card>
+
+    <!-- Notificación con icono de alerta -->
+    <ion-card class="notification-card">
+      <div class="notification-content">
+        <div class="notification-icon alert">
+          <ion-icon name="alert-circle-outline"></ion-icon>
+        </div>
+        <div class="notification-text">
+          <h3>Storm Warning</h3>
+          <p>Strong winds and thunderstorms expected</p>
+          <span class="time">8 hours ago</span>
+        </div>
+      </div>
+    </ion-card>
+  </div>
 </ion-content>
