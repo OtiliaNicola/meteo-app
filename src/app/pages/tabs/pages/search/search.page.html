@@ -1,13 +1,94 @@
-<ion-header [translucent]="true">
+<ion-header class="app-layout__header ion-no-border">
   <ion-toolbar>
-    <ion-title>search</ion-title>
+    <ion-buttons slot="start">
+      <ion-button>
+        <ion-icon name="arrow-back" color="white"></ion-icon>
+        <!-- <ion-back-button defaultHref="/tabs/home"></ion-back-button> -->
+      </ion-button>
+    </ion-buttons>
+    <ion-title color="white">Search for City</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">search</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content [fullscreen]="true" class="app-layout__content">
+  <div class="search-container">
+    <div class="search-box">
+      <ion-icon name="search-outline"></ion-icon>
+      <ion-input placeholder="Bangalore" class="search-input"></ion-input>
+    </div>
+    <div class="search-location">
+      <ion-button fill="clear" class="search-location__btn">
+        <ion-icon name="location-outline"></ion-icon>
+      </ion-button>
+    </div>
+  </div>
+
+  <div class="cities-list">
+    <div class="city-content">
+      <ion-card class="city-card">
+        <div class="city-info">
+          <h3>Surat</h3>
+          <p>Cloudy</p>
+        </div>
+      </ion-card>
+      <div class="weather-icon-container">
+        <img
+          src="assets/icons/icon-cloudy-weatherSmall.svg"
+          alt="cloudy"
+          class="icon-cloudy"
+        />
+      </div>
+    </div>
+
+    <div class="city-content">
+      <ion-card class="city-card">
+        <div class="city-info">
+          <div>
+            <h3>Mumbai</h3>
+            <p>Rainy</p>
+          </div>
+        </div>
+      </ion-card>
+      <div class="weather-icon-container">
+        <img
+          src="assets/icons/icon-cloudy-weather.svg"
+          alt="rainy"            
+        />
+      </div>
+    </div>
+
+    <div class="city-content">
+      <ion-card class="city-card">
+        <div class="city-info">
+          <div>
+            <h3>Chennai</h3>
+            <p>Cold</p>
+          </div>
+        </div>
+      </ion-card>
+      <div class="weather-icon-container">
+        <img
+          src="assets/icons/icon-rain-weather.svg"
+          alt="cold" 
+        />
+      </div>
+    </div>
+
+    <div class="city-content">
+      <ion-card class="city-card">
+        <div class="city-info">
+          <div>
+            <h3>Manali</h3>
+            <p>Snowy</p>
+          </div>
+        </div>
+      </ion-card>
+      <div class="weather-icon-container">
+        <img
+          src="assets/icons/icon-cloudy-weather.svg"
+          alt="snowy"
+        />
+      </div>
+    </div>
+  </div>
 </ion-content>

@@ -1,0 +1,130 @@
+ion-toolbar {
+  --padding-start: 15px;
+  --padding-end: 15px;
+}
+
+ion-buttons {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 5px;
+}
+
+// .search-container {
+//   margin-bottom: 20px;
+
+//   .search-box {
+//     background: rgba(255, 255, 255, 0.1);
+//     border-radius: 25px;
+//     padding: 8px 16px;
+//     display: flex;
+//     align-items: center;
+//     gap: 10px;
+
+//     ion-icon {
+//       color: rgba(255, 255, 255, 0.7);
+//       font-size: 20px;
+//     }
+
+//     .search-input {
+//       flex: 1;
+//       --background: transparent;
+//       --color: white;
+//       --placeholder-color: rgba(255, 255, 255, 0.7);
+//       --placeholder-opacity: 1;
+//       --padding-start: 0;
+//     }
+
+//     ion-button {
+//       --color: rgba(255, 255, 255, 0.7);
+//       margin: 0;
+//       height: 36px;
+//     }
+//   }
+// }
+
+.cities-list {
+  .city-content{
+    position: relative;
+    padding: 20px;
+  }
+  .city-card {
+    --background: rgba(255, 255, 255, 0.1);
+    width: 80%;
+    height: 90px;
+    margin: 0;
+    border-radius: 16px;
+    .city-info {
+      padding-top: 15px;
+      padding-left: 10px;
+      h3 {
+        color: white;
+        font-size: 24px;
+        margin: 0;
+        font-weight: 500;
+      }
+      p {
+        color: rgba(255, 255, 255, 0.7);
+        margin: 5px 0 0;
+        font-size: 16px;
+      }
+    }
+  }
+  .weather-icon-container {
+    position: absolute;
+    top: 0;
+    right: 20px;
+    
+    img {
+      &.icon-cloudy{
+        width: 125px;
+        height: 125px;
+      }
+      width: 138px;
+      height: 138px;
+    }
+  }
+}
+
+.search-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 40px 20px;
+ 
+  .search-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-left: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    width: 85%;
+    ion-icon {
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 20px;
+    }
+    .search-input {
+      --background: transparent;
+      --color: white;
+      --placeholder-color: rgba(255, 255, 255, 0.7);
+      --padding-start: 0;
+    }
+  }
+
+  .search-location {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+
+    ion-button::part(native) {
+      top: -8px;
+      right: 7px;
+  } 
+  
+    ion-icon {
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 20px;
+    }
+  }
+
+}
