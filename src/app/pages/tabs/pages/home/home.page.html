@@ -1,13 +1,139 @@
-<ion-header [translucent]="true">
+<ion-header class="app-layout__header ion-no-border">
   <ion-toolbar>
-    <ion-title>home</ion-title>
+    <ion-buttons slot="start">
+      <ion-button>
+        <ion-icon name="grid" color="white"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title color="white">Surat</ion-title>
+    <ion-buttons slot="end">
+      <ion-button>
+        <ion-icon name="reload" color="white"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">home</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content [fullscreen]="true" class="app-layout__content">
+  <div class="weather-status" color="white">
+    <span class="weather-status__condition">Mostly Sunny</span>
+    <img
+      src="assets/icons/icon-cloudy.svg"
+      alt="cloudy"
+      class="weather-status__icon"
+    />
+    <span class="weather-status__temp">23°</span>
+    <span class="weather-status__date">Friday, 26 August 2022 | 10:00</span>
+  </div>
+
+  <ion-card class="weather-metrics">
+    <ion-grid>
+      <ion-row>
+        <ion-col size="4" class="ion-text-center weather-metrics__col">
+          <ion-img src="assets/icons/icon-precipitation.svg" alt="precipitation"></ion-img>
+          <span>30%</span>
+          <span>Precipitation</span>
+        </ion-col>
+        <ion-col size="4" class="ion-text-center weather-metrics__col">
+          <ion-img src="assets/icons/icon-humidity.svg" alt="humidity"></ion-img>
+          <span>20%</span>
+          <span>Humidity</span>
+        </ion-col>
+        <ion-col size="4" class="ion-text-center weather-metrics__col">
+          <ion-img src="assets/icons/icon-windSpeed.svg" alt="windSpeed"></ion-img>
+          <span>9km/h</span>
+          <span>Wind Speed</span>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-card>
+
+  <div class="forecast">
+    <div class="forecast__header">
+      <span>Today</span>
+      <span>7-Day Forecasts</span>
+    </div>
+    <div class="forecast__hours">
+      <div class="hour-item">
+        <span class="time">10 AM</span>
+        <img src="assets/icons/icon-cloudy-weatherSmall.svg" alt="cloudy" class="weather-metric-icon"/>
+        <span class="temp">23°</span>
+      </div>
+      <div class="hour-item">
+        <span class="time">12 AM</span>
+        <img src="assets/icons/icon-cloudy-weather.svg" alt="cloudy-weather" />
+        <span class="temp">23°</span>
+      </div>
+      <div class="hour-item">
+        <span class="time">1 PM</span>
+        <img src="assets/icons/icon-cloudy-weather.svg" alt="cloudy-weather" />
+        <span class="temp">23°</span>
+      </div>
+      <div class="hour-item">
+        <span class="time">3 PM</span>
+        <img
+          src="assets/icons/icon-thunder-weather.svg"
+          alt="thunder-weather"
+        />
+        <span class="temp">23°</span>
+      </div>
+      <div class="hour-item">
+        <span class="time">5 PM</span>
+        <img src="assets/icons/icon-rain-weather.svg" alt="rain-weather" />
+        <span class="temp">23°</span>
+      </div>
+      <div class="hour-item">
+        <span class="time">10 PM</span>
+        <img src="assets/icons/icon-rain-weather.svg" alt="rain-weather" />
+        <span class="temp">23°</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="other-cities">
+    <div class="other-cities__header">
+      <span>Other Cities</span>
+      <ion-buttons>
+      <ion-button>
+        <ion-icon name="add-outline" color="white"></ion-icon>
+      </ion-button>
+      </ion-buttons>
+    </div>
+    <div class="other-cities__content">
+      <div class="city-item">
+        <div class="city-info">
+          <img
+            src="assets/icons/icon-cloudy-weatherSmall.svg"
+            alt="cloudy"
+            class="weather-metric-icon"
+          />
+          <div>
+            <span class="name">Delhi</span>
+            <span class="condition">Sunny</span>
+          </div>
+          <span class="temp">9°</span>
+        </div>
+      </div>
+      <div class="city-item">
+        <div class="city-info">
+          <img src="assets/icons/icon-cloudy-weather.svg" alt="cloudy-weather" class="weather-metric-icon"/>
+          <div>
+            <span class="name">Kolkata</span>
+            <span class="condition">Snowy</span>
+          </div>
+          <span class="temp">9°</span>
+        </div>
+      </div>
+      <div class="city-item">
+        <div class="city-info">
+          <img src="assets/icons/icon-rain-weather.svg" alt="rain-weather" class="weather-metric-icon"/>
+          <div>
+            <span class="name">Haydrabad</span>
+            <span class="condition">Rain</span>
+          </div>
+          <span class="temp">9°</span>
+        </div>
+      </div>
+    </div>
+  </div>
 </ion-content>
