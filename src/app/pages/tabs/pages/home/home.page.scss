@@ -8,15 +8,6 @@ ion-buttons {
   border-radius: 5px;
 }
 
-// .app-layout {
-//   &__header {
-//     ion-toolbar {
-//       --background: transparent;
-//       --border-style: none;
-//     }
-//   }
-// }
-
 .weather-status {
   display: flex;
   flex-direction: column;
@@ -86,7 +77,7 @@ ion-buttons {
 
     .hour-item {
       flex: 0 0 auto;
-      width: 70px;
+      width: 85px;
       min-height: 100px;
       padding: 1rem;
       background: rgba(255, 255, 255, 0.1);
@@ -123,13 +114,14 @@ ion-buttons {
   &__content {
     display: flex;
     gap: 1rem;
+    overflow-x: auto;
   }
   .city-item {
     background: rgba(255, 255, 255, 0.1);
     border-radius: 12px;
     color: white;
     display: flex;
-
+    min-width: 230px;
     .city-info {
       min-width: 160px;
       display: flex;
@@ -156,6 +148,9 @@ ion-buttons {
         font-weight: 500;
         margin-right: 1rem;
       }
+    }
+    .city-desc{
+      min-width: 120px;
     }
   }
 }
