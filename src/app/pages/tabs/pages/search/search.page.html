@@ -14,79 +14,37 @@
   <div class="search-container">
     <div class="search-box">
       <ion-icon name="search-outline"></ion-icon>
-      <ion-input placeholder="Bangalore" class="search-input"></ion-input>
+      <ion-input
+        [(ngModel)]="city"
+        placeholder="Bangalore"
+        class="search-input"
+        (ionChange)="searchCity()"
+      ></ion-input>
     </div>
     <div class="search-location">
-      <ion-button fill="clear" class="search-location__btn">
+      <ion-button
+        fill="clear"
+        class="search-location__btn"
+        (click)="searchCity()"
+      >
         <ion-icon name="location-outline"></ion-icon>
       </ion-button>
     </div>
   </div>
 
   <div class="cities-list">
-    <div class="city-content">
+    <div class="city-content" *ngFor="let item of cityWeather">
       <ion-card class="city-card">
         <div class="city-info">
-          <h3>Surat</h3>
-          <p>Cloudy</p>
+          <h3>{{ item?.city | titlecase}}</h3>
+          <p>{{ item?.desc | titlecase}}</p>
         </div>
       </ion-card>
       <div class="weather-icon-container">
-        <img
-          src="assets/icons/icon-cloudy-weatherSmall.svg"
+        <img      
+          [src]="item?.iconUrl"
           alt="cloudy"
           class="icon-cloudy"
-        />
-      </div>
-    </div>
-
-    <div class="city-content">
-      <ion-card class="city-card">
-        <div class="city-info">
-          <div>
-            <h3>Mumbai</h3>
-            <p>Rainy</p>
-          </div>
-        </div>
-      </ion-card>
-      <div class="weather-icon-container">
-        <img
-          src="assets/icons/icon-cloudy-weather.svg"
-          alt="rainy"            
-        />
-      </div>
-    </div>
-
-    <div class="city-content">
-      <ion-card class="city-card">
-        <div class="city-info">
-          <div>
-            <h3>Chennai</h3>
-            <p>Cold</p>
-          </div>
-        </div>
-      </ion-card>
-      <div class="weather-icon-container">
-        <img
-          src="assets/icons/icon-rain-weather.svg"
-          alt="cold" 
-        />
-      </div>
-    </div>
-
-    <div class="city-content">
-      <ion-card class="city-card">
-        <div class="city-info">
-          <div>
-            <h3>Manali</h3>
-            <p>Snowy</p>
-          </div>
-        </div>
-      </ion-card>
-      <div class="weather-icon-container">
-        <img
-          src="assets/icons/icon-cloudy-weather.svg"
-          alt="snowy"
         />
       </div>
     </div>
