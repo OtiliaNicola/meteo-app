@@ -1,18 +1,18 @@
 <ion-tabs>
-  <ion-tab-bar slot="bottom">
-    <ion-tab-button tab="home">
-      <ion-icon aria-hidden="true" name="home-outline"></ion-icon>
+ <ion-tab-bar slot="bottom" class="app-layout__tabs">
+    <ion-tab-button tab="home" [routerLink]="['/tabs/home']" routerLinkActive="router-link-active" >
+      <ion-icon aria-hidden="true" name="home"></ion-icon>
     </ion-tab-button>
 
-    <ion-tab-button tab="search">
+    <ion-tab-button tab="search" [routerLink]="['/tabs/search']" routerLinkActive="router-link-active"  >
       <ion-icon aria-hidden="true" name="search-outline"></ion-icon>
     </ion-tab-button>
 
-    <ion-tab-button tab="feedback">
+    <ion-tab-button tab="feedback" [routerLink]="['/tabs/feedback']" routerLinkActive="router-link-active"  >
       <ion-icon aria-hidden="true" name="person-outline"></ion-icon>
     </ion-tab-button>
 
-    <ion-tab-button tab="notifications">
+    <ion-tab-button tab="notifications" [routerLink]="['/tabs/notifications']"routerLinkActive="router-link-active"  >
       <ion-icon aria-hidden="true" name="notifications-outline"></ion-icon>
     </ion-tab-button>
   </ion-tab-bar>
