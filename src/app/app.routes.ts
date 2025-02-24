@@ -1,10 +1,9 @@
-import { DetailSevenDaysPage } from './pages/tabs/pages/detail-seven-days/detail-seven-days.page';
 import { Routes } from '@angular/router';
 
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'tabs',
+    redirectTo: 'tabs/home',
     pathMatch: 'full',
   },
   {
@@ -30,12 +29,12 @@ export const routes: Routes = [
       {
         path: 'notifications',
         loadComponent: () => import('./pages/tabs/pages/notifications/notifications.page').then( m => m.NotificationsPage)
-      },
-      {
-        path: '',
-        redirectTo: 'home',
-        pathMatch: 'full',
       }
     ]
   },
+  // {
+  //   path: 'add-city-modal',
+  //   loadComponent: () => import('./shared/add-city-modal/add-city-modal.page').then( m => m.AddCityModalPage)
+  // },
+
 ];
