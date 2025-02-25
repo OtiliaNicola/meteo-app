@@ -15,29 +15,29 @@ ion-toolbar {
   &__img{
     display: flex;
     align-items: center;
-    margin: 6px 36px 27px 21px;
+    margin: 10px 36px 20px 36px;
   }
   &__temp{
-    margin-left: 36px;
+    margin-left: 80px;
     color: white;
     position: relative;
     .today-temp__max{
       font-size: 55px;
-      font-weight: 500;
-      
+      font-weight: 500;  
       line-height: 80px;
     }
     .today-temp__slash{
       font-size: 55px;
       top: 28px;
       position: absolute;
-      left: 66px;
+      left: 55px;
       transform: rotate(7deg);
     }
     .today-temp__min{
       font-size: 25px;
       line-height: 80px;
       top: 34px;
+      left: 90px;
       position: absolute;
     }
   }
@@ -56,15 +56,15 @@ ion-toolbar {
       flex-direction: column;
       gap: 0.5rem;
       margin: 5px 0;
+      span{
+        font-size: 13px;
+      }
     }
   }
 
   .forecast{
     color: white;
     .forecast-day{
-      // display: flex;
-      // justify-content: space-between;
-      // align-items: center;
       display: grid;
       grid-template-columns: 8rem 1fr 5rem;
       align-items: center;
@@ -81,7 +81,7 @@ ion-toolbar {
       align-items: center;
       gap: 0.5rem;
       &__img{
-        width: 50px;
+        width: 60px;
       }
       &__condition{
         font-size: 14px;

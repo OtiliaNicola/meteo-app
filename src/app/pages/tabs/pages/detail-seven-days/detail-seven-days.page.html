@@ -5,21 +5,21 @@
         <ion-icon name="arrow-back" color="white"></ion-icon>
       </ion-button>
     </ion-buttons>
-    <ion-title color="white">7 Days</ion-title>
+    <ion-title color="white">Prónostico varios días</ion-title>
   </ion-toolbar>
 </ion-header>
 <ion-content [fullscreen]="true" class="app-layout__content">
   <div class="container-today">
     <div class="container-today__img">
       <img
-        src="assets/icons/icon-cloudy.svg"
+      [src]="'https://openweathermap.org/img/wn/' + hourlyForecast[0].weather[0].icon + '@2x.png'"
         alt="cloudy"
         class="weather-status__icon"
       />
       <div class="container-today__temp">
-        <span class="today-temp__max">23°</span>
+        <span class="today-temp__max">{{ hourlyForecast[0].main.temp_max | number:'1.0-0' }}°</span>
         <span class="today-temp__slash">/</span>
-        <span class="today-temp__min">17°</span>
+        <span class="today-temp__min">{{ hourlyForecast[0].main.temp_min | number:'1.0-0' }}°</span>
       </div>
     </div>
     <div class="weather-metrics">
@@ -27,27 +27,27 @@
         <ion-row class="ion-justify-content-around">
           <ion-col size="4" class="ion-text-center weather-metrics__col">
             <ion-img
-              src="assets/icons/icon-precipitation.svg"
+            src="assets/icons/icon-precipitation.svg"
               alt="precipitation"
             ></ion-img>
-            <span>30%</span>
-            <span>Precipitation</span>
+            <span>{{ hourlyForecast[0].main.pressure | number:'1.0-0' }} hPa</span>
+            <span>Precipitación</span>
           </ion-col>
           <ion-col size="4" class="ion-text-center weather-metrics__col">
             <ion-img
               src="assets/icons/icon-humidity.svg"
               alt="humidity"
             ></ion-img>
-            <span>20%</span>
-            <span>Humidity</span>
+            <span>{{ hourlyForecast[0].main.humidity | number:'1.0-0' }}%</span>
+            <span>Humedad</span>
           </ion-col>
           <ion-col size="4" class="ion-text-center weather-metrics__col">
             <ion-img
               src="assets/icons/icon-windSpeed.svg"
               alt="windSpeed"
             ></ion-img>
-            <span>9km/h</span>
-            <span>Wind Speed</span>
+            <span>{{ hourlyForecast[0].wind.speed | number:'1.0-0' }} km/h</span>
+            <span>Velocidad del viento</span>
           </ion-col>
         </ion-row>
       </ion-grid>
@@ -55,77 +55,20 @@
   </div>
 
   <div class="forecast">
-    <div class="forecast-day">
-      <h3 class="forecast-day__weekday">Monday</h3>
+    <div class="forecast-day" *ngFor="let hour of hourlyForecast; let i = index">
+      <h3 class="forecast-day__weekday" *ngIf="isNewDay(hour.dt_txt, i)">{{ hour.dt_txt ? capitalizeFirstLetter(hour.dt_txt | date: 'EEEE') : '' }}</h3>
       <div class="forecast-info">
-        <img class="forecast-info__img" src="assets/icons/icon-cloudy-weatherSmall.svg" alt="cloudy">
-        <span class="forecast-info__condition">Sunny</span>
+        <img
+          class="forecast-info__img"
+          [src]="'https://openweathermap.org/img/wn/' + hour.weather[0].icon + '@2x.png'"
+          alt="cloudy"
+        />
+        <span class="forecast-info__condition">{{ capitalizeFirstLetter(hour.weather[0].description) }}</span>
       </div>
       <div class="forecast-temp">
-        <span class="forecast-temp__min">+31°</span>
-        <span class="forecast-temp__max">+51°</span>
+        <span class="forecast-temp__min">{{ hour.main.temp_min | number:'1.0-0' }}°</span>
+        <span class="forecast-temp__max">{{ hour.main.temp_max | number:'1.0-0' }}°</span>
       </div>
     </div>
-
-    <div class="forecast-day">
-      <h3 class="forecast-day__weekday">Tuesday</h3>
-      <div class="forecast-info">
-        <img class="forecast-info__img" src="assets/icons/icon-cloudy-weather.svg" alt="">
-        <span class="forecast-info__condition">Cloudy</span>
-      </div>
-      <div class="forecast-temp">
-        <span  class="forecast-temp__min">+31°</span>
-        <span class="forecast-temp__max">+51°</span>
-      </div>
-    </div>
-
-    <div class="forecast-day">
-      <h3 class="forecast-day__weekday">Wednesday</h3>
-      <div class="forecast-info">
-        <img class="forecast-info__img" src="assets/icons/icon-thunder-weather.svg" alt="">
-        <span class="forecast-info__condition">Thunder</span>
-      </div>
-      <div class="forecast-temp" >
-        <span  class="forecast-temp__min">+31°</span>
-        <span class="forecast-temp__max">+51°</span>
-      </div>
-    </div>
-
-    <div class="forecast-day">
-      <h3 class="forecast-day__weekday">Thurday</h3>
-      <div class="forecast-info">
-        <img class="forecast-info__img" src="assets/icons/icon-thunder-weather.svg" alt="">
-        <span class="forecast-info__condition">Thunder</span>
-      </div>
-      <div class="forecast-temp">
-        <span  class="forecast-temp__min">+31°</span>
-        <span class="forecast-temp__max">+51°</span>
-      </div>
-    </div>
-
-    <div class="forecast-day">
-      <h3 class="forecast-day__weekday">Friday</h3>
-      <div class="forecast-info">
-        <img class="forecast-info__img" src="assets/icons/icon-rain-weather.svg" alt="">
-        <span class="forecast-info__condition">Rain</span>
-      </div>
-      <div class="forecast-temp">
-        <span  class="forecast-temp__min">+31°</span>
-        <span class="forecast-temp__max">+51°</span>
-      </div>
-    </div>
-
-    <div class="forecast-day">
-      <h3 class="forecast-day__weekday">Saturday</h3>
-      <div class="forecast-info">
-        <img class="forecast-info__img" src="assets/icons/icon-rain-weather.svg" alt="">
-        <span class="forecast-info__condition">Rain</span>
-      </div>
-      <div class="forecast-temp">
-        <span  class="forecast-temp__min">+31°</span>
-        <span class="forecast-temp__max">+51°</span>
-      </div>
-    </div>
-
   </div>
 </ion-content>
