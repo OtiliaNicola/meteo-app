@@ -128,3 +128,28 @@ ion-buttons {
   }
 
 }
+
+.suggestions-dropdown {
+  position: absolute;
+  width: 75%;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+  max-height: 200px;
+  top: 130px;
+  overflow-y: auto;
+  left: 25px;
+}
+
+ion-list {
+  padding: 0;
+}
+
+ion-item {
+  cursor: pointer;
+}
+
+ion-item:hover {
+  background: #f0f0f0;
+}

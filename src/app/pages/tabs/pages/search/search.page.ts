@@ -3,15 +3,13 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import {
   IonButton,
-  IonButtons,
   IonCard,
   IonContent,
   IonHeader,
   IonIcon,
   IonInput,
   IonTitle,
-  IonToolbar,
-} from '@ionic/angular/standalone';
+  IonToolbar, IonItem, IonList, IonLabel } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import {
   arrowBack,
@@ -22,6 +20,7 @@ import {
   searchCircle,
   searchOutline,
 } from 'ionicons/icons';
+import { WeatherCity } from 'src/app/core/interfaces/weather-city.interface';
 import { WeatherData } from 'src/app/core/interfaces/weather-data.interface';
 import { LocalStorageService } from 'src/app/core/services/local-storage.service';
 import { SearchService } from 'src/app/core/services/search.service';
@@ -32,11 +31,10 @@ import { UtilsService } from 'src/app/core/services/utils.service';
   templateUrl: './search.page.html',
   styleUrls: ['./search.page.scss'],
   standalone: true,
-  imports: [
+  imports: [IonLabel, IonList, IonItem, 
     IonInput,
     IonButton,
     IonCard,
-    IonButtons,
     IonIcon,
     IonContent,
     IonHeader,
@@ -52,11 +50,12 @@ export class SearchPage implements OnInit {
   weatherData!: WeatherData;
   cityWeather: any[] = [];
   defaultImg: string = 'assets/icons/clima.png';
+  citySuggestions: WeatherCity[] = [];
 
   constructor(
     private readonly searchService: SearchService,
     private readonly storageService: LocalStorageService,
-    private readonly utilsService: UtilsService
+    private readonly utilsService: UtilsService,
   ) {
     addIcons({
       arrowBackOutline,
@@ -74,6 +73,31 @@ export class SearchPage implements OnInit {
     //OPERADOR TERNARIO (estructura de if-else)
     //tiene valor  = verdadero               (ejecuta)       sino asigna array vacío
     this.cityWeather = storedHistory || [];
+  }
+
+  async searchCitySuggestions() {
+    console.log(555);
+    
+    if (this.city.trim()) {
+      // Llamamos al servicio para obtener las sugerencias de ciudades
+      this.searchService.getCitySuggestions(this.city).subscribe({
+        next: (data) => {
+          this.citySuggestions = data; // Asignamos las sugerencias obtenidas
+        },
+        error: (err) => {
+          console.error('Error obteniendo sugerencias de ciudad:', err);
+        },
+      });
+    } else {
+      this.citySuggestions = []; // Limpiamos las sugerencias si no hay texto
+    }
+  }
+
+   // Función que maneja la selección de una ciudad de las sugerencias
+   selectCity(item: any) {
+    this.city = item.name; // Asignamos el nombre de la ciudad seleccionada
+    this.searchCity(); // Realizamos la búsqueda del clima para esta ciudad
+    this.citySuggestions = []; // Limpiamos las sugerencias
   }
 
   async searchCity() {

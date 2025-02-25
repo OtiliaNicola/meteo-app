@@ -1,16 +1,16 @@
 <ion-header class="app-layout__header ion-no-border">
   <ion-toolbar>
-    <ion-buttons slot="start">
+    <!-- <ion-buttons slot="start">
       <ion-button>
         <ion-icon name="arrow-back" color="white"></ion-icon>
-        <!-- <ion-back-button defaultHref="/tabs/home"></ion-back-button> -->
-      </ion-button>
-    </ion-buttons>
+        <ion-back-button defaultHref="/tabs/home"></ion-back-button> -->
+      <!-- </ion-button>
+    </ion-buttons> -->
     <ion-title color="white">Search for City</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true" class="app-layout__content">
+<ion-content [fullscreen]="false" class="app-layout__content">
   <div class="search-container">
     <div class="search-box">
       <ion-icon name="search-outline"></ion-icon>
@@ -18,22 +18,30 @@
         [(ngModel)]="city"
         placeholder="Bangalore"
         class="search-input"
-        (ionChange)="searchCity()"
+        (ionInput)="searchCitySuggestions()"
       ></ion-input>
     </div>
     <div class="search-location">
       <ion-button
-        fill="clear"
-        class="search-location__btn"
-        (click)="searchCity()"
+      fill="clear"
+      class="search-location__btn"
+      (click)="searchCity()"
       >
-        <ion-icon name="location-outline"></ion-icon>
-      </ion-button>
-    </div>
+      <ion-icon name="location-outline"></ion-icon>
+    </ion-button>
   </div>
+</div>
+<div *ngIf="citySuggestions.length > 0" class="suggestions-dropdown">
+  <ion-list>
+    <ion-item *ngFor="let suggestion of citySuggestions" (click)="selectCity(suggestion)">
+      <ion-label>{{ suggestion.name }}, {{ suggestion.country }}</ion-label>
+    </ion-item>
+  </ion-list>
+</div>
+
 
   <div class="cities-list">
-    <div class="city-content" *ngFor="let item of cityWeather">
+    <div class="city-content" *ngFor="let item of cityWeather" (click)="selectCity(item)">
       <ion-card class="city-card">
         <div class="city-info">
           <h3>{{ item?.city | titlecase}}</h3>
