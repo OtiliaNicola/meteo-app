@@ -12,60 +12,60 @@
 
 <ion-content [fullscreen]="true" class="app-layout__content">
   <div class="feedback-header">
-    <h2>Your feedback can help everyone see more accurate weather conditions!</h2>
+    <h2>Tus comentarios pueden ayudar a que todo el mundo vea unas condiciones meteorológicas más precisas.</h2>
   </div>
 
   <div class="weather-conditions">
     <div class="condition-row">
-      <div class="condition-card">
+      <div class="condition-card" [ngClass]="{'selected': selectedCondition === 'Sunny'}" (click)="selectCondition('Sunny')">
         <div class="condition-content">
           <img src="assets/icons/icon-sunny-weather.svg" alt="sunny" class="condition-icon"/>
         </div>
-        <span>Sunny</span>
+        <span>Soleado</span>
       </div>
 
-      <div class="condition-card">
+      <div class="condition-card" [ngClass]="{'selected': selectedCondition === 'Cloudy'}" (click)="selectCondition('Cloudy')">
         <div class="condition-content">
           <img src="assets/icons/icon-cloudy.svg" alt="cloudy" class="condition-icon"/>
         </div>
-        <span>Cloudy</span>
+        <span>Nublado</span>
       </div>
 
-      <div class="condition-card">
+      <div class="condition-card" [ngClass]="{'selected': selectedCondition === 'Rain'}" (click)="selectCondition('Rain')">
         <div class="condition-content">
           <img src="assets/icons/icon-rain-weather.svg" alt="rain" class="condition-icon"/>
         </div>
-        <span>Rain</span>
+        <span>Lluvia</span>
       </div>
     </div>
 
     <div class="condition-row">
-      <div class="condition-card">
+      <div class="condition-card" [ngClass]="{'selected': selectedCondition === 'Snow'}" (click)="selectCondition('Snow')">
         <div class="condition-content">
           <img src="assets/icons/icon-snow-weather.svg" alt="snow" class="condition-icon"/>
         </div>
-        <span>Snow</span>
+        <span>Nieve</span>
       </div>
 
-      <div class="condition-card">
+      <div class="condition-card" [ngClass]="{'selected': selectedCondition === 'Storm'}" (click)="selectCondition('Storm')">
         <div class="condition-content">
           <img src="assets/icons/icon-storm-weather.svg" alt="storm" class="condition-icon"/>
         </div>
-        <span>Storm</span>
+        <span>Tormenta</span>
       </div>
 
-      <div class="condition-card">
+      <div class="condition-card" [ngClass]="{'selected': selectedCondition === 'Thunder'}" (click)="selectCondition('Thunder')">
         <div class="condition-content">
           <img src="assets/icons/icon-thunder-weather.svg" alt="thunder" class="condition-icon"/>
         </div>
-        <span>Thunder</span>
+        <span>Truenos</span>
       </div>
     </div>
   </div>
 
   <div class="submit-section">
-    <ion-button expand="block" class="submit-button">
-      Submit
+    <ion-button expand="block" class="submit-button" (click)="submitFeedback()">
+      Enviar
     </ion-button>
   </div>
 </ion-content>
