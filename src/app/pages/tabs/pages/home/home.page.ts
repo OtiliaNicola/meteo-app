@@ -56,8 +56,7 @@ import { AddCityModalPage } from 'src/app/shared/add-city-modal/add-city-modal.p
     CommonModule,
     FormsModule,
     HttpClientModule,
-    RouterModule,
-    AddCityModalPage,
+    RouterModule
   ],
   providers: [ModalController],
 })
