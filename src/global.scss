@@ -49,15 +49,15 @@
 }
 
 .app-layout__header {
-    --background: transparent;
-    --ion-background-color: transparent;
-    --ion-toolbar-background: transparent;
+    // --background: transparent;
+    // --ion-background-color: transparent;
+    --ion-toolbar-background:#353287;
     box-shadow: none;
   }
 
   .app-layout__tabs {
-    --background: linear-gradient(to bottom, rgba(68, 29, 92, 0.9)), url(/assets/background-meteo.svg) no-repeat center top;
-    --ion-background-color: transparent;
+    --background:rgb(84 50 108);
+   
     box-shadow: none;
     border-top: none;
   }
