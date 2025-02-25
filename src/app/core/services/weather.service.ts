@@ -22,9 +22,14 @@ export class WeatherService {
   }
 
   getWeatherByCity<T>(city: string, header: any): Observable<T> {
+    if (!city || city.trim() === '') {
+      console.error('No se proporcionó un nombre de ciudad válido');
+      return new Observable(); // Evitamos enviar una solicitud vacía
+    }
     let params = new HttpParams()
       .append('appid', environment.weatherApiKey)
       .append('q', city);  // Parámetro de ciudad
+      
     Object.keys(header).forEach((key: string) => {
       params = params.append(key, header[key]);
     });
