@@ -6,7 +6,8 @@ import {
   IonIcon,
   IonTabBar,
   IonTabButton,
-  IonTabs, IonRouterOutlet } from '@ionic/angular/standalone';
+  IonTabs
+} from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import {
   home,
@@ -20,7 +21,7 @@ import {
   templateUrl: './tabs.page.html',
   styleUrls: ['./tabs.page.scss'],
   standalone: true,
-  imports: [IonRouterOutlet, 
+  imports: [ 
     CommonModule,
     FormsModule,
     IonTabs,
