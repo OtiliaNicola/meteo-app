@@ -42,7 +42,9 @@ export class AddCityModalPage {
   constructor(private modalCtrl: ModalController) {}
 
   closeModal() {
-    this.modalCtrl.dismiss();
+    this.modalCtrl.dismiss({
+      cityName: this.cityName, // Pasamos la ciudad seleccionada
+    });
   }
 
   addCity() {
