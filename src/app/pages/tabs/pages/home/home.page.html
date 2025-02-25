@@ -53,15 +53,15 @@
     <div class="forecast">
       <div class="forecast__header">
         <span>Hoy</span>
-        <ion-button [routerLink]="['/tabs', 'detail-seven-days']">
+        <ion-button (click)="navigateToSevenDayForecast()">
           Más días
         </ion-button>
       </div>
       <div class="forecast__hours" *ngIf="hourlyForecast">
-        <div class="hour-item" *ngFor="let item of hourlyForecast.list.slice(0, 6)">
-          <span class="time">{{ item.dt_txt | date: 'fullDate' }}</span>
-          <img [src]="'https://openweathermap.org/img/wn/' + item.weather[0].icon + '.png'" class="weather-metric-icon"/>
-          <span class="temp">{{ item.main.temp }}°C</span>
+        <div class="hour-item" *ngFor="let hour of hourlyForecast.list.slice(0, 6)">
+          <span class="time">{{ hour.dt_txt | date: 'shortTime' }}</span>
+          <img [src]="'https://openweathermap.org/img/wn/' + hour.weather[0].icon + '.png'" class="weather-metric-icon"/>
+          <span class="temp">{{ hour.main.temp }}°C</span>
         </div>
       </div>
     </div>
