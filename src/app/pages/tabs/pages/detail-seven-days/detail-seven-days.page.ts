@@ -117,6 +117,7 @@ export class DetailSevenDaysPage implements OnInit {
     if (!str) return '';
     return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
   }
+  
   isNewDay(date: string, index: number): boolean {
     const currentDay = new Date(date).getDate();
     if (index === 0) {
