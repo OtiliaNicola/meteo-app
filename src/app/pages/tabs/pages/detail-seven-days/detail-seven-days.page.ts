@@ -101,8 +101,6 @@ export class DetailSevenDaysPage implements OnInit {
                 const dateB = new Date(b.dt_txt).getTime();
                 return dateA - dateB;
               });
-  
-              console.log('Datos filtrados por días: ', this.hourlyForecast);
             } else {
               console.error('No hay datos disponibles en la respuesta del clima');
             }
