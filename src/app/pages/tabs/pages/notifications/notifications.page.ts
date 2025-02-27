@@ -2,14 +2,12 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import {
-  IonButton,
-  IonButtons,
   IonCard,
   IonContent,
   IonHeader,
   IonIcon,
   IonTitle,
-  IonToolbar,
+  IonToolbar
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import {
@@ -27,12 +25,10 @@ import { WeatherService } from 'src/app/core/services/weather.service';
   styleUrls: ['./notifications.page.scss'],
   standalone: true,
   imports: [
-    IonButton,
     IonContent,
     IonHeader,
     IonTitle,
     IonToolbar,
-    IonButtons,
     IonCard,
     IonIcon,
     CommonModule,
@@ -72,7 +68,6 @@ export class NotificationsPage implements OnInit {
         this.notifications = this.formatWeatherNotifications(data);
       });
     } else {
-      console.warn('No se pudo obtener la ubicación, usando ciudad por defecto');
       this.weatherService.getWeatherByCity('Madrid', params).subscribe((data: any) => {
         this.notifications = this.formatWeatherNotifications(data);
       });
