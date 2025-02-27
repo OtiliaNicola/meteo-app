@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import {
   IonButton,
   IonCard,
@@ -56,6 +57,7 @@ export class SearchPage implements OnInit {
     private readonly searchService: SearchService,
     private readonly storageService: LocalStorageService,
     private readonly utilsService: UtilsService,
+    private readonly router: Router
   ) {
     addIcons({
       arrowBackOutline,
@@ -76,8 +78,6 @@ export class SearchPage implements OnInit {
   }
 
   async searchCitySuggestions() {
-    console.log(555);
-    
     if (this.city.trim()) {
       // Llamamos al servicio para obtener las sugerencias de ciudades
       this.searchService.getCitySuggestions(this.city).subscribe({
@@ -95,14 +95,18 @@ export class SearchPage implements OnInit {
 
    // Función que maneja la selección de una ciudad de las sugerencias
    selectCity(item: any) {
-    this.city = item.name; // Asignamos el nombre de la ciudad seleccionada
+    this.city = item.name || item.city; // Asignamos el nombre de la ciudad seleccionada
     this.searchCity(); // Realizamos la búsqueda del clima para esta ciudad
     this.citySuggestions = []; // Limpiamos las sugerencias
   }
 
   async searchCity() {
     if (this.city.trim()) {
-      this.searchService.getWeatherByCity(this.city).subscribe({
+      const headers = {
+        units: 'metric',   // Unidades en grados Celsius
+        lang: 'sp',        // Idioma de la respuesta (español)
+      };
+      this.searchService.getWeatherByCity(this.city, headers).subscribe({
         next: async (data) => {
           if (data) {
             this.weatherData = data;
@@ -135,9 +139,8 @@ export class SearchPage implements OnInit {
             this.city = '';
           }
         },
-        error: (err) => {
+        error: () => {
           this.utilsService.presentToastDanger('No se encotraron resultados');
-          console.error('Error obteniendo el clima:', err);
         },
       });
     }
@@ -145,5 +148,13 @@ export class SearchPage implements OnInit {
 
   getImage(img: string) {
     return `http://openweathermap.org/img/wn/${img}.png`;
+  }
+
+  goToWeatherDetail(city: string) {
+    if (city && city.trim()) {
+      this.router.navigate(['/weather-detail-city', city]);
+    } else {
+      console.error('❌ Error: Ciudad no válida.');
+    }
   }
 }
