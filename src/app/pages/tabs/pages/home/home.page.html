@@ -33,17 +33,17 @@
         <ion-row>
           <ion-col size="4" class="ion-text-center weather-metrics__col">
             <ion-img src="assets/icons/icon-precipitation.svg" alt="precipitation"></ion-img>
-            <span>{{ weatherTime.main.pressure }} hPa</span>
+            <span>{{ weatherTime.main.pressure | number:'1.0-0' }} hPa</span>
             <span>Presión</span>
           </ion-col>
           <ion-col size="4" class="ion-text-center weather-metrics__col">
             <ion-img src="assets/icons/icon-humidity.svg" alt="humidity"></ion-img>
-            <span>{{ weatherTime.main.humidity }}%</span>
+            <span>{{ weatherTime.main.humidity | number:'1.0-0' }}%</span>
             <span>Humedad</span>
           </ion-col>
           <ion-col size="4" class="ion-text-center weather-metrics__col">
             <ion-img src="assets/icons/icon-windSpeed.svg" alt="windSpeed"></ion-img>
-            <span>{{ weatherTime.wind.speed }} km/h</span>
+            <span>{{ weatherTime.wind.speed | number:'1.0-0' }} km/h</span>
             <span>Viento</span>
           </ion-col>
         </ion-row>
@@ -87,7 +87,7 @@
               <span class="name">{{ cityWeather.name }}</span>
               <span class="condition">{{ cityWeather.weather[0].description | slice:0:1 | uppercase }}{{ cityWeather.weather[0].description | slice:1 | lowercase }}</span>
             </div>
-            <span class="temp">{{ cityWeather.main.temp }}°</span>
+            <span class="temp">{{ cityWeather.main.temp | number:'1.0-0' }}°</span>
           </div>
         </div>      
       </div>
