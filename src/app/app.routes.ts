@@ -36,10 +36,4 @@ export const routes: Routes = [
     path: 'weather-detail-city/:city',
     loadComponent: () => import('./pages/tabs/pages/weather-detail-city/weather-detail-city.page').then( m => m.WeatherDetailCityPage)
   },
-
-  // {
-  //   path: 'add-city-modal',
-  //   loadComponent: () => import('./shared/add-city-modal/add-city-modal.page').then( m => m.AddCityModalPage)
-  // },
-
 ];

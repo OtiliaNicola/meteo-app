@@ -13,8 +13,7 @@ import {
   IonImg,
   IonRow,
   IonTitle,
-  IonToolbar,
-} from '@ionic/angular/standalone';
+  IonToolbar, IonSpinner } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { arrowBack } from 'ionicons/icons';
 import { WeatherHourly } from 'src/app/core/interfaces/weather-hourly.interface';
@@ -25,7 +24,7 @@ import { WeatherService } from 'src/app/core/services/weather.service';
   templateUrl: './detail-seven-days.page.html',
   styleUrls: ['./detail-seven-days.page.scss'],
   standalone: true,
-  imports: [
+  imports: [IonSpinner, 
     IonCol,
     IonImg,
     IonGrid,

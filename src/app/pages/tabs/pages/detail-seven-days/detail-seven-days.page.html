@@ -1,77 +1,94 @@
-<ng-container *ngIf="hourlyForecast">
+@if (hourlyForecast.length > 0) {
   <ion-header class="app-layout__header ion-no-border">
     <ion-toolbar>
       <ion-buttons slot="start">
-        <ion-button [routerLink]="['/tabs/home']" >
-          <ion-icon  name="arrow-back" color="white"></ion-icon>
+        <ion-button [routerLink]="['/tabs/home']">
+          <ion-icon name="arrow-back" color="white"></ion-icon>
         </ion-button>
       </ion-buttons>
-      <ion-title color="white">Prónostico varios días</ion-title>
+      <ion-title color="white">Pronóstico varios días</ion-title>
     </ion-toolbar>
   </ion-header>
+  
   <ion-content [fullscreen]="true" class="app-layout__content">
-    <div class="container-today">
-      <div class="container-today__img">
+    <div class="forecast-today">
+      <div class="forecast-today__header">
         <img
-        [src]="'https://openweathermap.org/img/wn/' + hourlyForecast[0]?.weather[0].icon + '@2x.png'"
-          alt="cloudy"
-          class="weather-status__icon"
+          [src]="'https://openweathermap.org/img/wn/' + hourlyForecast[0]?.weather[0].icon + '@2x.png'"
+          [alt]="hourlyForecast[0]?.weather[0].description"
+          class="forecast-today__icon"
         />
-        <div class="container-today__temp">
-          <span class="today-temp__max">{{ hourlyForecast[0]?.main.temp_max | number:'1.0-0' }}°</span>
-          <span class="today-temp__slash">/</span>
-          <span class="today-temp__min">{{ hourlyForecast[0]?.main.temp_min | number:'1.0-0' }}°</span>
+        <div class="forecast-today__temperature">
+          <span class="forecast-today__temperature-max">{{ hourlyForecast[0]?.main.temp_max | number:'1.0-0' }}°</span>
+          <span class="forecast-today__temperature-separator">/</span>
+          <span class="forecast-today__temperature-min">{{ hourlyForecast[0]?.main.temp_min | number:'1.0-0' }}°</span>
         </div>
       </div>
-      <div class="weather-metrics">
+      
+      <div class="forecast-metrics">
         <ion-grid>
           <ion-row class="ion-justify-content-around">
-            <ion-col size="4" class="ion-text-center weather-metrics__col">
+            <ion-col size="4" class="ion-text-center forecast-metrics__col">
               <ion-img
-              src="assets/icons/icon-precipitation.svg"
-                alt="precipitation"
+                src="assets/icons/icon-precipitation.svg"
+                alt="precipitación"
+                class="forecast-metrics__icon"
               ></ion-img>
-              <span>{{ hourlyForecast[0]?.main.pressure | number:'1.0-0' }} hPa</span>
-              <span>Precipitación</span>
+              <span class="forecast-metrics__value">{{ hourlyForecast[0]?.main.pressure | number:'1.0-0' }} hPa</span>
+              <span class="forecast-metrics__label">Precipitación</span>
             </ion-col>
-            <ion-col size="4" class="ion-text-center weather-metrics__col">
+            <ion-col size="4" class="ion-text-center forecast-metrics__col">
               <ion-img
                 src="assets/icons/icon-humidity.svg"
-                alt="humidity"
+                alt="humedad"
+                class="forecast-metrics__icon"
               ></ion-img>
-              <span>{{ hourlyForecast[0]?.main.humidity | number:'1.0-0' }}%</span>
-              <span>Humedad</span>
+              <span class="forecast-metrics__value">{{ hourlyForecast[0]?.main.humidity | number:'1.0-0' }}%</span>
+              <span class="forecast-metrics__label">Humedad</span>
             </ion-col>
-            <ion-col size="4" class="ion-text-center weather-metrics__col">
+            <ion-col size="4" class="ion-text-center forecast-metrics__col">
               <ion-img
                 src="assets/icons/icon-windSpeed.svg"
-                alt="windSpeed"
+                alt="viento"
+                class="forecast-metrics__icon"
               ></ion-img>
-              <span>{{ hourlyForecast[0]?.wind.speed | number:'1.0-0' }} km/h</span>
-              <span>Velocidad del viento</span>
+              <span class="forecast-metrics__value">{{ hourlyForecast[0]?.wind.speed | number:'1.0-0' }} km/h</span>
+              <span class="forecast-metrics__label">Velocidad del viento</span>
             </ion-col>
           </ion-row>
         </ion-grid>
       </div>
     </div>
   
-    <div class="forecast">
-      <div class="forecast-day" *ngFor="let hour of hourlyForecast; let i = index">
-        <h3 class="forecast-day__weekday" *ngIf="isNewDay(hour.dt_txt, i)">{{ hour.dt_txt ? capitalizeFirstLetter(hour.dt_txt | date: 'EEEE') : '' }}</h3>
-        <div class="forecast-info">
-          <img
-            class="forecast-info__img"
-            [src]="'https://openweathermap.org/img/wn/' + hour.weather[0].icon + '@2x.png'"
-            alt="cloudy"
-          />
-          <span class="forecast-info__condition">{{ capitalizeFirstLetter(hour.weather[0].description) }}</span>
+    <div class="forecast-days">
+      @for (hour of hourlyForecast; track hour.dt; let i = $index) {
+        @if (isNewDay(hour.dt_txt, i)) {
+          <h3 class="forecast-days__weekday">{{ hour.dt_txt ? capitalizeFirstLetter(hour.dt_txt | date: 'EEEE') : '' }}</h3>
+        }
+        <div class="forecast-days__item">
+          <div class="forecast-days__info">
+            <img
+              class="forecast-days__icon"
+              [src]="'https://openweathermap.org/img/wn/' + hour.weather[0].icon + '@2x.png'"
+              [alt]="hour.weather[0].description"
+            />
+            <span class="forecast-days__condition">{{ capitalizeFirstLetter(hour.weather[0].description) }}</span>
+          </div>
+          <div class="forecast-days__temperature">
+            <span class="forecast-days__temperature-min">{{ hour.main.temp_min | number:'1.0-0' }}°</span>
+            <span class="forecast-days__temperature-max">{{ hour.main.temp_max | number:'1.0-0' }}°</span>
+          </div>
         </div>
-        <div class="forecast-temp">
-          <span class="forecast-temp__min">{{ hour.main.temp_min | number:'1.0-0' }}°</span>
-          <span class="forecast-temp__max">{{ hour.main.temp_max | number:'1.0-0' }}°</span>
-        </div>
-      </div>
+      }
     </div>
   </ion-content>
-  
-</ng-container>
+}
+
+@else {
+  <ion-content class="app-layout__content">
+    <div class="loading">
+      <ion-spinner name="bubbles" class="loading__spinner"></ion-spinner>
+      <p class="loading__text">Cargando pronóstico...</p>
+    </div>
+  </ion-content>
+}

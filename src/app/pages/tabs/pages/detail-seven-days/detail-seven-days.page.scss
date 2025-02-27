@@ -1,39 +1,56 @@
-ion-toolbar {
-    --padding-start: 15px;
-    --padding-end: 15px;
-  }
-  
-  ion-buttons {
-    background-color: rgba(255, 255, 255, 0.2);
-    border-radius: 5px;
-  }
+// Variables
+$transparent-white: rgba(255, 255, 255, 0.1);
+$white-color: var(--ion-color-white);
+$border-radius: 15px;
 
-.container-today{
-  background: rgba(255, 255, 255, 0.1);
+// Toolbar y botones
+ion-toolbar {
+  --padding-start: 15px;
+  --padding-end: 15px;
+}
+
+ion-buttons {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 5px;
+}
+
+// Bloque: Pronóstico de hoy
+.forecast-today {
+  background: $transparent-white;
   margin: 55px 16px 28px;
-  border-radius: 15px;
-  &__img{
+  border-radius: $border-radius;
+  color: $white-color;
+  
+  &__header {
     display: flex;
     align-items: center;
     margin: 10px 36px 20px 36px;
   }
-  &__temp{
+  
+  &__icon {
+    width: 80px;
+    height: 80px;
+  }
+  
+  &__temperature {
     margin-left: 80px;
-    color: white;
     position: relative;
-    .today-temp__max{
+    
+    &-max {
       font-size: 55px;
       font-weight: 500;  
       line-height: 80px;
     }
-    .today-temp__slash{
+    
+    &-separator {
       font-size: 55px;
       top: 28px;
       position: absolute;
       left: 55px;
       transform: rotate(7deg);
     }
-    .today-temp__min{
+    
+    &-min {
       font-size: 25px;
       line-height: 80px;
       top: 34px;
@@ -43,53 +60,108 @@ ion-toolbar {
   }
 }
 
-
-  .weather-metrics {
-    color: white;
-    ion-img {
-      width: 24px;
-      height: 24px;
-      margin: 0 auto;
-    }
-    &__col {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-      margin: 5px 0;
-      span{
-        font-size: 13px;
-      }
-    }
+// Bloque: Métricas del pronóstico
+.forecast-metrics {
+  color: $white-color;
+  
+  &__icon {
+    width: 24px;
+    height: 24px;
+    margin: 0 auto;
   }
+  
+  &__col {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin: 5px 0;
+  }
+  
+  &__value {
+    font-size: 13px;
+    font-weight: 500;
+  }
+  
+  &__label {
+    font-size: 13px;
+    opacity: 0.8;
+  }
+}
 
-  .forecast{
-    color: white;
-    .forecast-day{
-      display: grid;
-      grid-template-columns: 8rem 1fr 5rem;
-      align-items: center;
-      padding: 0.5rem 1rem;
-      &__weekday{
-        font-size: 1rem;
-        font-family: Poppins;
-        font-weight: 300;
+// Bloque: Días de pronóstico
+.forecast-days {
+  color: $white-color;
+  margin: 0 16px;
+  
+  &__weekday {
+    font-size: 1rem;
+    font-family: Poppins, sans-serif;
+    font-weight: 300;
+    margin-top: 16px;
+    margin-bottom: 8px;
+  }
+  
+  &__item {
+    display: grid;
+    grid-template-columns: 8rem 1fr 5rem;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    margin-bottom: 8px;
+    border-radius: 10px;
+    background: $transparent-white;
+  }
+  
+  &__info {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    grid-column: 1 / 3;
+  }
+  
+  &__icon {
+    width: 60px;
+    height: 60px;
+  }
+  
+  &__condition {
+    font-size: 14px;
+    color: $white-color;
+  }
+  
+  &__temperature {
+    display: flex;
+    justify-content: space-between;
+    grid-column: 3 / 4;
     
-      }
+    &-min {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-right: 8px;
     }
-    .forecast-info{
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      &__img{
-        width: 60px;
-      }
-      &__condition{
-        font-size: 14px;
-        color: var(--ion-color-white);
-      }
-    }
-    .forecast-temp{
-      display: flex;
-      justify-content: space-between;
+    
+    &-max {
+      font-size: 14px;
+      font-weight: 500;
     }
   }
+}
+
+// Bloque: Pantalla de carga
+.loading {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  color: $white-color;
+  
+  &__spinner {
+    width: 50px;
+    height: 50px;
+  }
+  
+  &__text {
+    margin-top: 16px;
+    font-size: 16px;
+  }
+}

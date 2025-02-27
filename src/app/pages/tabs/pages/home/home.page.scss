@@ -1,3 +1,9 @@
+// Variables globales
+$background-transparent: rgba(255, 255, 255, 0.1);
+$white-color: var(--ion-color-white);
+$border-radius: 12px;
+
+// Estilos para el toolbar
 ion-toolbar {
   --padding-start: 15px;
   --padding-end: 15px;
@@ -8,13 +14,14 @@ ion-buttons {
   border-radius: 5px;
 }
 
+// Bloque: Estado del tiempo
 .weather-status {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 1rem;
   margin-top: 1.875rem;
-  color: var(--ion-color-white);
+  color: $white-color;
 
   &__condition {
     font-size: 1rem;
@@ -42,23 +49,36 @@ ion-buttons {
   }
 }
 
+// Bloque: Métricas del clima
 .weather-metrics {
-  --background: rgba(255, 255, 255, 0.1);
-  color: white;
+  --background: #{$background-transparent};
+  color: $white-color;
   margin: 0 55px;
-  ion-img {
+  
+  &__icon {
     width: 24px;
     height: 24px;
     margin: 0 auto;
   }
+  
   &__col {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
     margin: 5px 0;
   }
+  
+  &__value {
+    font-weight: 500;
+  }
+  
+  &__label {
+    font-size: 0.85rem;
+    opacity: 0.8;
+  }
 }
 
+// Bloque: Pronóstico
 .forecast {
   margin: 1rem;
 
@@ -66,8 +86,12 @@ ion-buttons {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    color: white;
+    color: $white-color;
     margin-bottom: 1rem;
+  }
+  
+  &__title {
+    font-weight: 500;
   }
 
   &__hours {
@@ -75,83 +99,121 @@ ion-buttons {
     overflow-x: auto;
     gap: 0.5rem;
     padding: 0.5rem 0;
-
-    .hour-item {
-      flex: 0 0 auto;
-      width: 85px;
-      min-height: 100px;
-      padding: 1rem;
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 12px;
-      text-align: center;
-      color: white;
-
-      .time {
-        font-size: 0.75rem;
-      }
-      .weather-metric-icon {
-        width: 50px;
-        height: 41px;
-      }
-      .temp {
-        font-size: 0.75rem;
-        font-weight: 500;
-      }
+    
+    // Ocultar scrollbar pero mantener funcionalidad
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE y Edge */
+    &::-webkit-scrollbar {
+      display: none; /* Chrome, Safari, Opera */
     }
+  }
+  
+  &__hour-item {
+    flex: 0 0 auto;
+    width: 85px;
+    min-height: 100px;
+    padding: 1rem;
+    background: $background-transparent;
+    border-radius: $border-radius;
+    text-align: center;
+    color: $white-color;
+  }
+  
+  &__hour-time {
+    font-size: 0.75rem;
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+  
+  &__hour-icon {
+    width: 50px;
+    height: 41px;
+    margin: 0 auto;
+  }
+  
+  &__hour-temp {
+    font-size: 0.75rem;
+    font-weight: 500;
+    display: block;
+    margin-top: 0.5rem;
   }
 }
 
-.other-cities {
-  margin-left: 1rem;
-  margin-right: 1rem;
+// Bloque: Ciudades
+.cities {
+  margin: 1rem;
+  
   &__header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 1rem;
-    color: white;
+    color: $white-color;
+  }
+  
+  &__title {
+    font-weight: 500;
   }
 
   &__content {
     display: flex;
     gap: 1rem;
     overflow-x: auto;
+    padding-bottom: 1rem;
+    
+    // Ocultar scrollbar pero mantener funcionalidad
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE y Edge */
+    &::-webkit-scrollbar {
+      display: none; /* Chrome, Safari, Opera */
+    }
   }
-  .city-item {
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 12px;
-    color: white;
+  
+  &__item {
+    background: $background-transparent;
+    border-radius: $border-radius;
+    color: $white-color;
     display: flex;
     min-width: 230px;
-    .city-info {
-      min-width: 160px;
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-      gap: 0.5rem;
-      margin: 5px 5px;
-      .weather-metric-icon {
-        width: 50px;
-        height: 50px;
-        margin: 0;
-      }
-      .name {
-        display: block;
-        font-size: 1.1rem;
-        font-weight: 500;
-      }
-      .condition {
-        font-size: 0.9rem;
-        opacity: 0.7;
-      }
-      &.temp {
-        font-size: 1.2rem;
-        font-weight: 500;
-        margin-right: 1rem;
-      }
-    }
-    .city-desc{
-      min-width: 120px;
-    }
+  }
+  
+  &__info {
+    min-width: 160px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 10px;
+    width: 100%;
+  }
+  
+  &__icon {
+    width: 50px;
+    height: 50px;
+    margin: 0;
+  }
+  
+  &__details {
+    min-width: 120px;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  &__name {
+    display: block;
+    font-size: 1.1rem;
+    font-weight: 500;
+    margin-bottom: 0.25rem;
+  }
+  
+  &__condition {
+    font-size: 0.9rem;
+    opacity: 0.7;
+  }
+  
+  &__temp {
+    font-size: 1.2rem;
+    font-weight: 500;
+    margin-left: auto;
   }
 }

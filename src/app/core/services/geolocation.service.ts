@@ -11,17 +11,27 @@ export class GeolocationService {
   }
 
   async printCurrentPosition(): Promise<{ lat: number; lon: number }> {
-    const position = await Geolocation.getCurrentPosition();
-    return {
-      lat: position.coords.latitude,
-      lon: position.coords.longitude,
-    };
+    try {
+      const position = await Geolocation.getCurrentPosition();
+      return {
+        lat: position.coords.latitude,
+        lon: position.coords.longitude,
+      };
+    } catch (error) {
+      console.error('Error getting current location:', error);
+      throw error;
+    }
   }
 
   async requestPermissions() {
-    if (Capacitor.isNativePlatform()) {
-      return await Geolocation.requestPermissions();
+    try {
+      if (Capacitor.isNativePlatform()) {
+        return await Geolocation.requestPermissions();
+      }
+      return false;
+    } catch (error) {
+      console.error('Error requesting geolocation permissions:', error);
+      return false;
     }
-    return false;
   }
 }

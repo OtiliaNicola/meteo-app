@@ -16,8 +16,7 @@ import {
   IonRow,
   IonTitle,
   IonToolbar,
-  ModalController,
-} from '@ionic/angular/standalone';
+  ModalController, IonSpinner } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import {
   addOutline,
@@ -40,7 +39,7 @@ import { AddCityModalPage } from 'src/app/shared/add-city-modal/add-city-modal.p
   templateUrl: './home.page.html',
   styleUrls: ['./home.page.scss'],
   standalone: true,
-  imports: [
+  imports: [IonSpinner, 
     IonImg,
     IonCol,
     IonGrid,
@@ -61,9 +60,9 @@ import { AddCityModalPage } from 'src/app/shared/add-city-modal/add-city-modal.p
   providers: [ModalController],
 })
 export class HomePage implements OnInit {
-  weatherTime!: WeatherData;
-  forecastData!: WeatherWeekend;
-  hourlyForecast!: WeatherHourly;
+  weatherTime?: WeatherData;
+  forecastData?: WeatherWeekend;
+  hourlyForecast?: WeatherHourly;
   weatherData: WeatherData[] = [];
   cities: string[] = [];
 
@@ -72,7 +71,6 @@ export class HomePage implements OnInit {
     private readonly weatherService: WeatherService,
     private readonly router: Router,
     private readonly modalCtrl: ModalController,
-    private readonly changeDetectorRef: ChangeDetectorRef
   ) {
     addIcons({
       grid,

@@ -1,0 +1,78 @@
+/* Estilos para el componente principal */
+
+/* Manejo de pantallas grandes */
+@media (min-width: 768px) {
+    ion-app {
+      --ion-safe-area-top: 20px;
+      --ion-safe-area-bottom: 20px;
+      
+      /* Fondo para pantallas grandes */
+      background: 
+        linear-gradient(to bottom, 
+          #121212,
+          #2d2d2d
+        );
+      
+      /* Permitir que tabs y router-outlet se centren */
+      ion-router-outlet, ion-tabs {
+        margin: 0 auto;
+        max-width: 375px; /* Ancho estándar de iPhone */
+        height: 100%;
+        
+        /* Efecto borde del dispositivo */
+        &::before {
+          content: '';
+          position: absolute;
+          top: -20px;
+          left: -10px;
+          right: -10px;
+          bottom: -20px;
+          background-color: #1a1a1a;
+          border-radius: 40px;
+          box-shadow: 0 0 40px rgba(0, 0, 0, 0.8);
+          z-index: -1;
+        }
+      }
+      
+      /* Ajustar tabs para que se centren */
+      ion-tabs {
+        display: flex;
+        flex-direction: column;
+        
+        ion-tab-bar {
+          max-width: 375px;
+          margin: 0 auto;
+          border-bottom-left-radius: 30px;
+          border-bottom-right-radius: 30px;
+          overflow: hidden;
+        }
+      }
+    }
+    
+    /* Añadir decoración de "pantalla móvil" */
+    .desktop-phone-frame {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 395px; /* Ligeramente más grande que el contenido */
+      height: calc(100vh - 40px);
+      max-height: 852px;
+      border-radius: 40px;
+      box-shadow: 0 0 50px rgba(0, 0, 0, 0.6);
+      pointer-events: none;
+      z-index: -1;
+      
+      &::before {
+        content: '';
+        position: absolute;
+        top: 15px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 150px;
+        height: 25px;
+        background-color: #000;
+        border-radius: 20px;
+      }
+    }
+  }

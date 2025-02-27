@@ -11,7 +11,7 @@ import {
 })
 export class UtilsService {
 
-  loading!: HTMLIonLoadingElement;
+  private loading?: HTMLIonLoadingElement;
 
   constructor(
     private readonly toastController: ToastController,
@@ -25,7 +25,7 @@ export class UtilsService {
     position: 'top' | 'middle' | 'bottom' = 'bottom',
     state: string | undefined = undefined,
     duration = 1500
-  ) {
+  ): Promise<void> {
     const toast = await this.toastController.create({
       message: text,
       duration,
@@ -36,51 +36,53 @@ export class UtilsService {
     await toast.present();
   }
 
-  presentToastDanger(
+  async presentToastDanger(
     text: string,
     duration = 7000,
     position: 'top' | 'middle' | 'bottom' = 'bottom'
-  ) {
-    this.presentToast(text, position, 'danger', duration);
+  ): Promise<void> {
+    await this.presentToast(text, position, 'danger', duration);
   }
 
-  presentToastWarning(
+  async presentToastWarning(
     text: string,
     position: 'top' | 'middle' | 'bottom' = 'bottom'
-  ) {
-    this.presentToast(text, position, 'warning');
+  ): Promise<void> {
+    await this.presentToast(text, position, 'warning');
   }
 
-  presentToastInfo(
+  async presentToastInfo(
     text: string,
     position: 'top' | 'middle' | 'bottom' = 'bottom'
-  ) {
-    this.presentToast(text, position, 'secondary');
+  ): Promise<void> {
+    await this.presentToast(text, position, 'secondary');
   }
 
-  presentToastSuccess(
+  async presentToastSuccess(
     text: string,
     position: 'top' | 'middle' | 'bottom' = 'bottom'
-  ) {
-    this.presentToast(text, position, 'success');
+  ): Promise<void> {
+    await this.presentToast(text, position, 'success');
   }
 
-  async presentLoading() {
+  async presentLoading(): Promise<void> {
     this.loading = await this.loadingController.create({
       spinner: 'bubbles',
     });
     await this.loading.present();
   }
 
-  hiddenLoading() {
-    this.loading.dismiss();
+  async hiddenLoading(): Promise<void> {
+    if (this.loading) {
+      await this.loading.dismiss();
+    }
   }
 
-  routerLink(url: string) {
+  routerLink(url: string): void {
     this.router.navigateByUrl(url);
   }
 
-  async confirmDelete(header: string) {
+  async confirmDelete(header: string): Promise<boolean> {
     const actionSheet = await this.actionSheetCtrl.create({
       header: header,
       buttons: [
@@ -95,7 +97,7 @@ export class UtilsService {
       ],
     });
 
-    actionSheet.present();
+    await actionSheet.present();
 
     const { role } = await actionSheet.onWillDismiss();
 

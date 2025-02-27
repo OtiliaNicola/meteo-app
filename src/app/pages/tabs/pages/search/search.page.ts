@@ -21,6 +21,7 @@ import {
   searchCircle,
   searchOutline,
 } from 'ionicons/icons';
+import { SearchHistoryItem } from 'src/app/core/interfaces/search-history-item.interface';
 import { WeatherCity } from 'src/app/core/interfaces/weather-city.interface';
 import { WeatherData } from 'src/app/core/interfaces/weather-data.interface';
 import { LocalStorageService } from 'src/app/core/services/local-storage.service';
@@ -49,7 +50,7 @@ import { UtilsService } from 'src/app/core/services/utils.service';
 export class SearchPage implements OnInit {
   city: string = '';
   weatherData!: WeatherData;
-  cityWeather: any[] = [];
+  cityWeather: SearchHistoryItem[] = [];
   defaultImg: string = 'assets/icons/clima.png';
   citySuggestions: WeatherCity[] = [];
 
@@ -71,10 +72,14 @@ export class SearchPage implements OnInit {
   }
 
   async ngOnInit() {
-    const storedHistory = await this.storageService.get('searchHistory');
-    //OPERADOR TERNARIO (estructura de if-else)
-    //tiene valor  = verdadero               (ejecuta)       sino asigna array vacío
-    this.cityWeather = storedHistory || [];
+    try {
+      const storedHistory = await this.storageService.get<SearchHistoryItem[]>('searchHistory');
+      // Verificamos que sea un array y tiene elementos
+      this.cityWeather = Array.isArray(storedHistory) ? storedHistory : [];
+    } catch (error) {
+      console.error('Error al cargar el historial de búsqueda:', error);
+      this.cityWeather = [];
+    }
   }
 
   async searchCitySuggestions() {
@@ -94,56 +99,66 @@ export class SearchPage implements OnInit {
   }
 
    // Función que maneja la selección de una ciudad de las sugerencias
-   selectCity(item: any) {
-    this.city = item.name || item.city; // Asignamos el nombre de la ciudad seleccionada
+   selectCity(item: WeatherCity) {
+    this.city = item.name ; // Asignamos el nombre de la ciudad seleccionada
     this.searchCity(); // Realizamos la búsqueda del clima para esta ciudad
     this.citySuggestions = []; // Limpiamos las sugerencias
   }
 
   async searchCity() {
-    if (this.city.trim()) {
-      const headers = {
-        units: 'metric',   // Unidades en grados Celsius
-        lang: 'sp',        // Idioma de la respuesta (español)
-      };
-      this.searchService.getWeatherByCity(this.city, headers).subscribe({
-        next: async (data) => {
-          if (data) {
-            this.weatherData = data;
+    if (!this.city.trim()) return;
+    
+    const headers = {
+      units: 'metric',   // Unidades en grados Celsius
+      lang: 'sp',        // Idioma de la respuesta (español)
+    };
+    
+    this.searchService.getWeatherByCity(this.city, headers).subscribe({
+      next: async (data) => {
+        if (data) {
+          this.weatherData = data;
 
-            // Recuperamos historial anterior
-            let history = await this.storageService.get('searchHistory');
-            history = history ? Object.values(history) : [];
+          try {
+            // Recuperamos historial anterior con tipo correcto
+            const history = await this.storageService.get<SearchHistoryItem[]>('searchHistory') || [];
+            const historyArray: SearchHistoryItem[] = Array.isArray(history) ? history : [];
 
             // Evitar duplicados
-            if (
-              !history.some(
-                (entry: any) => entry.city.toLowerCase() === this.city.toLowerCase()
-              )
-            ) {
-              const newEntry = {
+            const cityLower = this.city.toLowerCase();
+            const cityExists = historyArray.some(
+              (entry) => entry.city.toLowerCase() === cityLower
+            );
+
+            if (!cityExists) {
+              const newEntry: SearchHistoryItem = {
                 city: this.city,
                 desc: data.weather[0].description,
                 iconUrl: data.weather[0].icon
-                  ? `http://openweathermap.org/img/wn/${data.weather[0].icon}.png`
+                  ? `https://openweathermap.org/img/wn/${data.weather[0].icon}.png`
                   : this.defaultImg,
               };
-              history.unshift(newEntry);
+              
+              // Añadir al principio del array
+              historyArray.unshift(newEntry);
 
               // Guardar el historial actualizado
-              await this.storageService.set('searchHistory', history);
-         
+              await this.storageService.set('searchHistory', historyArray);
+              
+              // Actualizar la vista
+              this.cityWeather = [...historyArray];
             }
-            this.cityWeather = [...history];
 
             this.city = '';
+          } catch (error) {
+            console.error('Error al manejar el historial:', error);
           }
-        },
-        error: () => {
-          this.utilsService.presentToastDanger('No se encotraron resultados');
-        },
-      });
-    }
+        }
+      },
+      error: (error) => {
+        console.error('Error al buscar ciudad:', error);
+        this.utilsService.presentToastDanger('No se encontraron resultados');
+      },
+    });
   }
 
   getImage(img: string) {

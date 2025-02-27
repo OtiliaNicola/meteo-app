@@ -1,27 +1,28 @@
-<ng-container *ngIf="weatherTime">
-<ion-header class="app-layout__header ion-no-border" >
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-button>
-        <ion-icon name="grid" color="white"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-    <ion-title color="white">{{weatherTime.name || 'Ubicación no disponible'}}</ion-title>
-    <ion-buttons slot="end">
-      <ion-button (click)="getLocationUser()">
-        <ion-icon name="reload" color="white"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-  </ion-toolbar>
-</ion-header>
-  
+@if (weatherTime) {
+  <ion-header class="app-layout__header ion-no-border">
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-button>
+          <ion-icon name="grid" color="white"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+      <ion-title color="white">{{weatherTime.name || 'Ubicación no disponible'}}</ion-title>
+      <ion-buttons slot="end">
+        <ion-button (click)="getLocationUser()">
+          <ion-icon name="reload" color="white"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+    
   <ion-content [fullscreen]="true" class="app-layout__content">
-    <div class="weather-status" color="white">
-      <span class="weather-status__condition">{{weatherTime.weather[0].description  | slice:0:1 | uppercase }}{{weatherTime.weather[0].description  | slice:1 | lowercase }}
+    <div class="weather-status">
+      <span class="weather-status__condition">
+        {{weatherTime.weather[0].description | titlecase}}
       </span>
       <img
         src="https://openweathermap.org/img/wn/{{ weatherTime.weather[0].icon }}@2x.png"
-        alt="cloudy"
+        alt="{{weatherTime.weather[0].description}}"
         class="weather-status__icon"
       />
       <span class="weather-status__temp">{{ weatherTime.main.temp }}°</span>
@@ -32,19 +33,19 @@
       <ion-grid>
         <ion-row>
           <ion-col size="4" class="ion-text-center weather-metrics__col">
-            <ion-img src="assets/icons/icon-precipitation.svg" alt="precipitation"></ion-img>
-            <span>{{ weatherTime.main.pressure | number:'1.0-0' }} hPa</span>
-            <span>Presión</span>
+            <ion-img src="assets/icons/icon-precipitation.svg" alt="presión" class="weather-metrics__icon"></ion-img>
+            <span class="weather-metrics__value">{{ weatherTime.main.pressure | number:'1.0-0' }} hPa</span>
+            <span class="weather-metrics__label">Presión</span>
           </ion-col>
           <ion-col size="4" class="ion-text-center weather-metrics__col">
-            <ion-img src="assets/icons/icon-humidity.svg" alt="humidity"></ion-img>
-            <span>{{ weatherTime.main.humidity | number:'1.0-0' }}%</span>
-            <span>Humedad</span>
+            <ion-img src="assets/icons/icon-humidity.svg" alt="humedad" class="weather-metrics__icon"></ion-img>
+            <span class="weather-metrics__value">{{ weatherTime.main.humidity | number:'1.0-0' }}%</span>
+            <span class="weather-metrics__label">Humedad</span>
           </ion-col>
           <ion-col size="4" class="ion-text-center weather-metrics__col">
-            <ion-img src="assets/icons/icon-windSpeed.svg" alt="windSpeed"></ion-img>
-            <span>{{ weatherTime.wind.speed | number:'1.0-0' }} km/h</span>
-            <span>Viento</span>
+            <ion-img src="assets/icons/icon-windSpeed.svg" alt="viento" class="weather-metrics__icon"></ion-img>
+            <span class="weather-metrics__value">{{ weatherTime.wind.speed | number:'1.0-0' }} km/h</span>
+            <span class="weather-metrics__label">Viento</span>
           </ion-col>
         </ion-row>
       </ion-grid>
@@ -52,45 +53,70 @@
   
     <div class="forecast">
       <div class="forecast__header">
-        <span>Hoy</span>
-        <ion-button (click)="navigateToSevenDayForecast()">
+        <span class="forecast__title">Hoy</span>
+        <ion-button (click)="navigateToSevenDayForecast()" class="forecast__button">
           Más días
         </ion-button>
       </div>
-      <div class="forecast__hours" *ngIf="hourlyForecast">
-        <div class="hour-item" *ngFor="let hour of hourlyForecast.list.slice(0, 6)">
-          <span class="time">{{ hour.dt_txt | date: 'shortTime' }}</span>
-          <img [src]="'https://openweathermap.org/img/wn/' + hour.weather[0].icon + '.png'" class="weather-metric-icon"/>
-          <span class="temp">{{ hour.main.temp }}°C</span>
+      
+      @if (hourlyForecast) {
+        <div class="forecast__hours">
+          @for (hour of hourlyForecast.list.slice(0, 6); track hour.dt) {
+            <div class="forecast__hour-item">
+              <span class="forecast__hour-time">{{ hour.dt_txt | date: 'shortTime' }}</span>
+              <img 
+                [src]="'https://openweathermap.org/img/wn/' + hour.weather[0].icon + '.png'" 
+                [alt]="hour.weather[0].description"
+                class="forecast__hour-icon"/>
+              <span class="forecast__hour-temp">{{ hour.main.temp }}°C</span>
+            </div>
+          }
         </div>
-      </div>
+      }
     </div>
   
-    <div class="other-cities">
-      <div class="other-cities__header">
-        <span>Otras ciudades</span>
+    <div class="cities">
+      <div class="cities__header">
+        <span class="cities__title">Otras ciudades</span>
         <ion-buttons>
-        <ion-button (click)="openAddCityModal()">
-          <ion-icon name="add-outline" color="white"></ion-icon>
-        </ion-button>
+          <ion-button (click)="openAddCityModal()" class="cities__add-button">
+            <ion-icon name="add-outline" color="white"></ion-icon>
+          </ion-button>
         </ion-buttons>
       </div>
-      <div class="other-cities__content">
-        <div class="city-item" *ngFor="let cityWeather of weatherData">
-          <div class="city-info">
-            <img
-            [src]="'http://openweathermap.org/img/wn/' + cityWeather.weather[0].icon + '.png'"
-              alt="cloudy"
-              class="weather-metric-icon"
-            />
-            <div class="city-desc">
-              <span class="name">{{ cityWeather.name }}</span>
-              <span class="condition">{{ cityWeather.weather[0].description | slice:0:1 | uppercase }}{{ cityWeather.weather[0].description | slice:1 | lowercase }}</span>
+      <div class="cities__content">
+        @for (cityWeather of weatherData; track cityWeather.id) {
+          <div class="cities__item">
+            <div class="cities__info">
+              <img
+                [src]="'https://openweathermap.org/img/wn/' + cityWeather.weather[0].icon + '.png'"
+                [alt]="cityWeather.weather[0].description"
+                class="cities__icon"
+              />
+              <div class="cities__details">
+                <span class="cities__name">{{ cityWeather.name }}</span>
+                <span class="cities__condition">{{ cityWeather.weather[0].description | titlecase }}</span>
+              </div>
+              <span class="cities__temp">{{ cityWeather.main.temp | number:'1.0-0' }}°</span>
             </div>
-            <span class="temp">{{ cityWeather.main.temp | number:'1.0-0' }}°</span>
           </div>
-        </div>      
+        }
+        
+        @empty {
+          <div class="cities__empty">
+            No hay ciudades guardadas.
+          </div>
+        }
       </div>
     </div>
   </ion-content>
-</ng-container>
+  }
+  
+  @else {
+    <ion-content class="app-layout__content">
+      <div class="loading-container">
+        <ion-spinner name="bubbles"></ion-spinner>
+        <p>Cargando datos del clima...</p>
+      </div>
+    </ion-content>
+  }
