@@ -33,7 +33,7 @@ export class SearchService {
       .set('q', query) // Tomamos el texto que el usuario está escribiendo
       .set('limit', '5'); // Limitar a las primeras 5 sugerencias
 
-    return this.httpClient.get<WeatherCity[]>(`${environment.baseGeoUrl}`, {
+    return this.httpClient.get<WeatherCity[]>(`${environment.baseUrl}`, {
       params,
     });
   }
