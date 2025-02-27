@@ -5,6 +5,7 @@
 export const environment = {
     production: false,
     weatherApiKey: "4bd90fd344fd412a78bf6f709fa538b2",
+    baseGeoUrl: "http://api.openweathermap.org/geo/1.0/direct",
     baseUrl: "https://api.openweathermap.org/data/2.5/"
   };
   
