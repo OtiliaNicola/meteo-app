@@ -23,7 +23,6 @@ export class WeatherService {
 
   getWeatherByCity<T>(city: string, header: any): Observable<T> {
     if (!city || city.trim() === '') {
-      console.error('No se proporcionó un nombre de ciudad válido');
       return new Observable(); // Evitamos enviar una solicitud vacía
     }
     let params = new HttpParams()
