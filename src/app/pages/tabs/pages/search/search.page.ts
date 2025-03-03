@@ -1,8 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, OnInit, signal } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ViewWillLeave, ViewWillEnter } from '@ionic/angular';
 import {
   IonCard,
   IonContent,
@@ -60,7 +59,7 @@ import { UtilsService } from 'src/app/core/services/utils.service';
     FormsModule,
   ],
 })
-export class SearchPage implements OnInit, OnDestroy, ViewWillLeave, ViewWillEnter {
+export class SearchPage implements OnInit, OnDestroy {
   city: string = '';
   weatherData!: WeatherData;
   cityWeather: SearchHistoryItem[] = [];
@@ -107,16 +106,7 @@ export class SearchPage implements OnInit, OnDestroy, ViewWillLeave, ViewWillEnt
       this.cityWeather = [];
     }
   }
-  ionViewWillLeave() {
-    // Código a ejecutar antes de abandonar la página
-    // Puedes añadir una clase CSS temporal o ajustar la opacidad
-    document.body.classList.add('page-transition');
-  }
   
-  ionViewWillEnter() {
-    // Código a ejecutar antes de entrar a la página
-    document.body.classList.remove('page-transition');
-  }
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
@@ -235,7 +225,7 @@ export class SearchPage implements OnInit, OnDestroy, ViewWillLeave, ViewWillEnt
 
   goToWeatherDetail(city: string) {
     if (city && city.trim()) {
-      this.router.navigate(['/weather-detail-city', city]);
+      this.router.navigate(['/tabs/weather-detail-city', city]);
     } else {
       console.error('❌ Error: Ciudad no válida.');
     }
