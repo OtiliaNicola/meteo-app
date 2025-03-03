@@ -7,7 +7,7 @@
           <ion-icon slot="icon-only" name="arrow-back" color="white"></ion-icon>
         </ion-button>
       </ion-buttons>
-      <ion-title color="white">{{ city || 'Ubicación no disponible' }}</ion-title>
+      <ion-title color="white">{{(city ? city : 'Ubicación no disponible') | titlecase}}</ion-title>
     </ion-toolbar>
   </ion-header>
   
