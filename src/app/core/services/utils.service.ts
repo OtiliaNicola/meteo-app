@@ -4,7 +4,7 @@ import {
   ActionSheetController,
   LoadingController,
   ToastController,
-} from '@ionic/angular';
+} from '@ionic/angular/standalone';
 
 @Injectable({
   providedIn: 'root'
