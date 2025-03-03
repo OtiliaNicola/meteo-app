@@ -48,7 +48,9 @@ export class UtilsService {
     text: string,
     position: 'top' | 'middle' | 'bottom' = 'bottom'
   ): Promise<void> {
+    console.log('🔵 Llamando a presentToastSuccess');
     await this.presentToast(text, position, 'warning');
+    console.log('🟢 Toast de éxito mostrado');
   }
 
   async presentToastInfo(
