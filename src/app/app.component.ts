@@ -1,5 +1,6 @@
 import { Component, HostListener, Renderer2 } from '@angular/core';
 import { IonApp, IonRouterOutlet, Platform } from '@ionic/angular/standalone';
+import packageInfo from '../../package.json';
 
 @Component({
   selector: 'app-root',
@@ -19,6 +20,8 @@ export class AppComponent {
     private renderer: Renderer2
   ) {
     this.initializeApp();
+    console.log(packageInfo.version);
+    
   }
 
   initializeApp() {
