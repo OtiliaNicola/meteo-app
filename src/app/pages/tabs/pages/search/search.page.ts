@@ -203,16 +203,16 @@ export class SearchPage implements OnInit, OnDestroy {
 
   async removeFromHistory(item: SearchHistoryItem) {
     try {
-      // Eliminar del array local
+      // Mostrar el toast antes de eliminar para mejorar la experiencia del usuario
+      this.utilsService.presentToastSuccess(`Ciudad "${item.city}" eliminada`);
+      
+      // Filtrar el elemento del array local
       this.cityWeather = this.cityWeather.filter(city => 
         city.city.toLowerCase() !== item.city.toLowerCase()
       );
       
-      // Actualizar el almacenamiento
+      // Actualizar el almacenamiento local
       await this.storageService.set('searchHistory', this.cityWeather);
-      
-      // Mostrar confirmación
-      this.utilsService.presentToastSuccess(`Ciudad eliminada`);
     } catch (error) {
       console.error('Error al eliminar ciudad:', error);
       this.utilsService.presentToastDanger('Error al eliminar la ciudad');
