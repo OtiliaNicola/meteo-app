@@ -1,11 +1,5 @@
 <ion-header class="app-layout__header ion-no-border">
   <ion-toolbar>
-    <!-- <ion-buttons slot="start">
-      <ion-button>
-        <ion-icon name="arrow-back" color="white"></ion-icon>
-        <ion-back-button defaultHref="/tabs/home"></ion-back-button> -->
-      <!-- </ion-button>
-    </ion-buttons> -->
     <ion-title color="white">Search for City</ion-title>
   </ion-toolbar>
 </ion-header>
@@ -19,42 +13,44 @@
         placeholder="Bangalore"
         class="search-input"
         (ionInput)="searchCitySuggestions()"
+        debounce="300"
       ></ion-input>
     </div>
-    <!-- <div class="search-location">
-      <ion-button
-      fill="clear"
-      class="search-location__btn"
-      (click)="searchCity()"
-      >
-      <ion-icon name="location-outline"></ion-icon>
-    </ion-button>
-  </div> -->
-</div>
-<div *ngIf="citySuggestions.length > 0" class="suggestions-dropdown">
-  <ion-list>
-    <ion-item *ngFor="let suggestion of citySuggestions" (click)="selectCity(suggestion)">
-      <ion-label>{{ suggestion.name }}, {{ suggestion.country }}</ion-label>
-    </ion-item>
-  </ion-list>
-</div>
-
-
+  </div>
+  
+  <div *ngIf="citySuggestions.length > 0" class="suggestions-dropdown">
+    <ion-list>
+      <ion-item *ngFor="let suggestion of citySuggestions" (click)="selectCity(suggestion)">
+        <ion-label>{{ suggestion.name }}, {{ suggestion.country }}</ion-label>
+      </ion-item>
+    </ion-list>
+  </div>
+  
   <div class="cities-list">
-    <div class="city-content" *ngFor="let item of cityWeather" (click)="goToWeatherDetail(item.city)">
-      <ion-card class="city-card">
-        <div class="city-info">
-          <h3>{{ item?.city | titlecase}}</h3>
-          <p>{{ item?.desc | titlecase}}</p>
+    <ion-item-sliding *ngFor="let item of cityWeather">
+      <ion-item class="transparent-item">
+        <div class="city-content" (click)="goToWeatherDetail(item.city)">
+          <ion-card class="city-card">
+            <div class="city-info">
+              <h3>{{ item?.city | titlecase}}</h3>
+              <p>{{ item?.desc | titlecase}}</p>
+            </div>
+          </ion-card>
+          <div class="weather-icon-container">
+            <img
+              [src]="item?.iconUrl"
+              alt="cloudy"
+              class="icon-cloudy"
+            />
+          </div>
         </div>
-      </ion-card>
-      <div class="weather-icon-container">
-        <img      
-          [src]="item?.iconUrl"
-          alt="cloudy"
-          class="icon-cloudy"
-        />
-      </div>
-    </div>
+      </ion-item>
+      
+      <ion-item-options side="end">
+        <ion-item-option color="danger" (click)="removeFromHistory(item)">
+          <ion-icon slot="icon-only" name="trash"></ion-icon>
+        </ion-item-option>
+      </ion-item-options>
+    </ion-item-sliding>
   </div>
 </ion-content>

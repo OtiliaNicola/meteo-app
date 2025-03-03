@@ -1,15 +1,23 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ViewWillLeave, ViewWillEnter } from '@ionic/angular';
 import {
   IonCard,
   IonContent,
   IonHeader,
   IonIcon,
   IonInput,
+  IonItem,
+  IonItemOption,
+  IonItemOptions,
+  IonItemSliding,
+  IonLabel,
+  IonList,
   IonTitle,
-  IonToolbar, IonItem, IonList, IonLabel } from '@ionic/angular/standalone';
+  IonToolbar
+} from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import {
   arrowBack,
@@ -19,7 +27,9 @@ import {
   locationOutline,
   searchCircle,
   searchOutline,
+  trash
 } from 'ionicons/icons';
+import { Subject, debounceTime, distinctUntilChanged, takeUntil } from 'rxjs';
 import { SearchHistoryItem } from 'src/app/core/interfaces/search-history-item.interface';
 import { WeatherCity } from 'src/app/core/interfaces/weather-city.interface';
 import { WeatherData } from 'src/app/core/interfaces/weather-data.interface';
@@ -32,7 +42,10 @@ import { UtilsService } from 'src/app/core/services/utils.service';
   templateUrl: './search.page.html',
   styleUrls: ['./search.page.scss'],
   standalone: true,
-  imports: [IonLabel, IonList, IonItem, 
+  imports: [
+    IonLabel,
+    IonList,
+    IonItem,
     IonInput,
     IonCard,
     IonIcon,
@@ -40,17 +53,22 @@ import { UtilsService } from 'src/app/core/services/utils.service';
     IonHeader,
     IonTitle,
     IonToolbar,
-    IonInput,
+    IonItemSliding,
+    IonItemOptions,
+    IonItemOption,
     CommonModule,
     FormsModule,
   ],
 })
-export class SearchPage implements OnInit {
+export class SearchPage implements OnInit, OnDestroy, ViewWillLeave, ViewWillEnter {
   city: string = '';
   weatherData!: WeatherData;
   cityWeather: SearchHistoryItem[] = [];
   defaultImg: string = 'assets/icons/clima.png';
   citySuggestions: WeatherCity[] = [];
+  
+  private searchTerms = new Subject<string>();
+  private destroy$ = new Subject<void>();
 
   constructor(
     private readonly searchService: SearchService,
@@ -66,6 +84,16 @@ export class SearchPage implements OnInit {
       location,
       grid,
       searchCircle,
+      trash
+    });
+    
+    // Configurar la búsqueda reactiva con debounce
+    this.searchTerms.pipe(
+      takeUntil(this.destroy$),
+      debounceTime(300),
+      distinctUntilChanged()
+    ).subscribe(term => {
+      this.performSearch(term);
     });
   }
 
@@ -79,28 +107,52 @@ export class SearchPage implements OnInit {
       this.cityWeather = [];
     }
   }
-
-  async searchCitySuggestions() {
-    if (this.city.trim()) {
-      // Llamamos al servicio para obtener las sugerencias de ciudades
-      this.searchService.getCitySuggestions(this.city).subscribe({
-        next: (data) => {
-          this.citySuggestions = data; // Asignamos las sugerencias obtenidas
-        },
-        error: (err) => {
-          console.error('Error obteniendo sugerencias de ciudad:', err);
-        },
-      });
-    } else {
-      this.citySuggestions = []; // Limpiamos las sugerencias si no hay texto
-    }
+  ionViewWillLeave() {
+    // Código a ejecutar antes de abandonar la página
+    // Puedes añadir una clase CSS temporal o ajustar la opacidad
+    document.body.classList.add('page-transition');
+  }
+  
+  ionViewWillEnter() {
+    // Código a ejecutar antes de entrar a la página
+    document.body.classList.remove('page-transition');
+  }
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
-   // Función que maneja la selección de una ciudad de las sugerencias
-   selectCity(item: WeatherCity) {
-    this.city = item.name ; // Asignamos el nombre de la ciudad seleccionada
-    this.searchCity(); // Realizamos la búsqueda del clima para esta ciudad
-    this.citySuggestions = []; // Limpiamos las sugerencias
+  searchCitySuggestions() {
+    if (this.city && this.city.trim()) {
+      this.searchTerms.next(this.city.trim());
+    } else {
+      this.citySuggestions = [];
+    }
+  }
+  
+  private performSearch(term: string) {
+    if (term.length < 2) {
+      this.citySuggestions = [];
+      return;
+    }
+    
+    // Llamamos al servicio para obtener las sugerencias de ciudades
+    this.searchService.getCitySuggestions(term).subscribe({
+      next: (data) => {
+        this.citySuggestions = data.slice(0, 5); // Limitamos a 5 sugerencias
+      },
+      error: (err) => {
+        console.error('Error obteniendo sugerencias de ciudad:', err);
+        this.citySuggestions = [];
+      },
+    });
+  }
+
+  // Función que maneja la selección de una ciudad de las sugerencias
+  selectCity(item: WeatherCity) {
+    this.city = item.name;
+    this.searchCity();
+    this.citySuggestions = [];
   }
 
   async searchCity() {
@@ -159,8 +211,26 @@ export class SearchPage implements OnInit {
     });
   }
 
+  async removeFromHistory(item: SearchHistoryItem) {
+    try {
+      // Eliminar del array local
+      this.cityWeather = this.cityWeather.filter(city => 
+        city.city.toLowerCase() !== item.city.toLowerCase()
+      );
+      
+      // Actualizar el almacenamiento
+      await this.storageService.set('searchHistory', this.cityWeather);
+      
+      // Mostrar confirmación
+      this.utilsService.presentToastSuccess(`Ciudad eliminada`);
+    } catch (error) {
+      console.error('Error al eliminar ciudad:', error);
+      this.utilsService.presentToastDanger('Error al eliminar la ciudad');
+    }
+  }
+
   getImage(img: string) {
-    return `http://openweathermap.org/img/wn/${img}.png`;
+    return `https://openweathermap.org/img/wn/${img}.png`;
   }
 
   goToWeatherDetail(city: string) {

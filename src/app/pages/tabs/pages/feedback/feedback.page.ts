@@ -6,10 +6,9 @@ import {
   IonContent,
   IonHeader,
   IonTitle,
-  IonToolbar
-} from '@ionic/angular/standalone';
+  IonToolbar, IonIcon, IonItemOptions, IonItemOption, IonCard, IonItem, IonItemSliding, IonLabel, IonList } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { arrowBack } from 'ionicons/icons';
+import { arrowBack, searchOutline, trash } from 'ionicons/icons';
 import { UtilsService } from './../../../../core/services/utils.service';
 
 @Component({
@@ -17,7 +16,7 @@ import { UtilsService } from './../../../../core/services/utils.service';
   templateUrl: './feedback.page.html',
   styleUrls: ['./feedback.page.scss'],
   standalone: true,
-  imports: [
+  imports: [IonList, IonLabel, IonItemSliding, IonItem, IonCard, IonItemOption, IonItemOptions, IonIcon, 
     IonContent,
     IonHeader,
     IonTitle,
@@ -30,7 +29,7 @@ import { UtilsService } from './../../../../core/services/utils.service';
 export class FeedbackPage implements OnInit {
   selectedCondition: string = '';
   constructor(private readonly utilsService: UtilsService) {
-    addIcons({ arrowBack });
+    addIcons({searchOutline,trash,arrowBack});
   }
 
   ngOnInit() {}

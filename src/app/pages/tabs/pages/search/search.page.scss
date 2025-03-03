@@ -8,55 +8,13 @@ ion-buttons {
   border-radius: 5px;
 }
 
-.cities-list {
-  .city-content{
-    position: relative;
-    padding: 20px;
-  }
-  .city-card {
-    --background: rgba(255, 255, 255, 0.1);
-    width: 90%;
-    height: 90px;
-    margin: 0;
-    border-radius: 16px;
-    .city-info {
-      padding-top: 15px;
-      padding-left: 10px;
-      h3 {
-        color: white;
-        font-size: 24px;
-        margin: 0;
-        font-weight: 500;
-      }
-      p {
-        color: rgba(255, 255, 255, 0.7);
-        margin: 5px 0 0;
-        font-size: 16px;
-      }
-    }
-  }
-  .weather-icon-container {
-    position: absolute;
-    top: 0;
-    right: 0;
-    
-    img {
-      &.icon-cloudy{
-        width: 125px;
-        height: 125px;
-      }
-      width: 138px;
-      height: 138px;
-    }
-  }
-}
-
+// Contenedor principal de búsqueda
 .search-container {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin: 40px 20px;
- 
+  
   .search-box {
     display: flex;
     align-items: center;
@@ -65,10 +23,12 @@ ion-buttons {
     background: rgba(255, 255, 255, 0.1);
     border-radius: 16px;
     width: 100%;
+    
     ion-icon {
       color: rgba(255, 255, 255, 0.7);
       font-size: 20px;
     }
+    
     .search-input {
       --background: transparent;
       --color: white;
@@ -76,47 +36,126 @@ ion-buttons {
       --padding-start: 0;
     }
   }
-
-  .search-location {
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 50%;
-    width: 44px;
-    height: 44px;
-
-    ion-button::part(native) {
-      top: -8px;
-      right: 7px;
-  } 
-  
-    ion-icon {
-      color: rgba(255, 255, 255, 0.7);
-      font-size: 20px;
-    }
-  }
-
 }
 
+// Dropdown de sugerencias
 .suggestions-dropdown {
   position: absolute;
-  width: 75%;
+  width: calc(100% - 40px);
   background: white;
   border-radius: 8px;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
   z-index: 10;
   max-height: 200px;
-  top: 85px;
   overflow-y: auto;
-  left: 25px;
+  left: 20px;
+  right: 20px;
+  
+  ion-list {
+    padding: 0;
+  }
+  
+  ion-item {
+    --background: white;
+    --color: #333;
+    cursor: pointer;
+    
+    &:hover {
+      --background: #f0f0f0;
+    }
+  }
 }
 
-ion-list {
-  padding: 0;
+// Lista de ciudades con sliding
+.cities-list {
+  padding: 0 10px;
+  
+  ion-item-sliding {
+    margin-bottom: 15px;
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  
+  ion-item {
+    --padding-start: 0;
+    --inner-padding-end: 0;
+    --background: transparent;
+    --border-style: none;
+  }
+  
+  .city-content {
+    width: 100%;
+    margin: 0px 10px;
+    position: relative;
+    box-sizing: none;
+    
+    .city-card {
+      --background: rgba(255, 255, 255, 0.1);
+      width: 100%;
+      height: 90px;
+      margin: 0;
+      border-radius: 16px;
+      box-shadow: none;
+      
+      .city-info {
+        padding-top: 15px;
+        padding-left: 15px;
+        
+        h3 {
+          color: white;
+          font-size: 24px;
+          margin: 0;
+          font-weight: 500;
+        }
+        
+        p {
+          color: rgba(255, 255, 255, 0.7);
+          margin: 5px 0 0;
+          font-size: 16px;
+        }
+      }
+    }
+    
+    .weather-icon-container {
+      position: absolute;
+      top: -20px;
+      right: 0;
+      
+      img.icon-cloudy {
+        width: 125px;
+        height: 125px;
+      }
+    }
+  }
+  
+  ion-item-option {
+    margin: 5px 0;
+  }
 }
 
-ion-item {
-  cursor: pointer;
+// Estado vacío
+.empty-history {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  opacity: 0.7;
+  color: white;
+  text-align: center;
+  
+  .empty-icon {
+    font-size: 64px;
+    margin-bottom: 16px;
+  }
+  
+  p {
+    font-size: 16px;
+  }
 }
 
-ion-item:hover {
-  background: #f0f0f0;
+.page-transition {
+  .ion-page {
+    opacity: 0 !important;
+  }
 }

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import {
   IonCard,
@@ -14,10 +14,19 @@ import {
   alertCircleOutline,
   arrowBack,
   informationCircleOutline,
+  notificationsOutline,
   warningOutline,
 } from 'ionicons/icons';
+import { Subject, takeUntil } from 'rxjs';
 import { GeolocationService } from 'src/app/core/services/geolocation.service';
 import { WeatherService } from 'src/app/core/services/weather.service';
+
+interface Notification {
+  title: string;
+  description: string;
+  type: string;
+  timestamp: Date;
+}
 
 @Component({
   selector: 'app-notifications',
@@ -35,9 +44,10 @@ import { WeatherService } from 'src/app/core/services/weather.service';
     FormsModule,
   ],
 })
-export class NotificationsPage implements OnInit {
-  notifications: any[] = [];
+export class NotificationsPage implements OnInit, OnDestroy {
+  notifications = signal<Notification[]>([]);
   city = 'Madrid';
+  private destroy$ = new Subject<void>();
 
   constructor(
     private readonly weatherService: WeatherService,
@@ -48,6 +58,7 @@ export class NotificationsPage implements OnInit {
       warningOutline,
       informationCircleOutline,
       alertCircleOutline,
+      notificationsOutline,
     });
   }
 
@@ -55,30 +66,60 @@ export class NotificationsPage implements OnInit {
     this.loadWeatherNotifications();
   }
 
-  async loadWeatherNotifications() {
-    const location = await this.geolocationService.printCurrentPosition();
-    const params = { units: 'metric', lang: 'es' };
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 
-    if (location) {
-      this.weatherService.getWeatherByLatAndLon('weather', {
-        lat: location.lat,
-        lon: location.lon,
-        ...params
-      }).subscribe((data: any) => {
-        this.notifications = this.formatWeatherNotifications(data);
-      });
-    } else {
-      this.weatherService.getWeatherByCity('Madrid', params).subscribe((data: any) => {
-        this.notifications = this.formatWeatherNotifications(data);
-      });
+  async loadWeatherNotifications() {
+    try {
+      const location = await this.geolocationService.printCurrentPosition();
+      const params = { units: 'metric', lang: 'es' };
+
+      if (location) {
+        this.weatherService.getWeatherByLatAndLon('weather', {
+          lat: location.lat,
+          lon: location.lon,
+          ...params
+        })
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
+          next: (data: any) => {
+            this.notifications.set(this.formatWeatherNotifications(data));
+          },
+          error: (error) => {
+            console.error('Error al obtener datos del clima:', error);
+            this.loadDefaultCityData(params);
+          }
+        });
+      } else {
+        this.loadDefaultCityData(params);
+      }
+    } catch (error) {
+      console.error('Error al obtener ubicación:', error);
+      this.loadDefaultCityData({ units: 'metric', lang: 'es' });
     }
   }
 
-  formatWeatherNotifications(weatherData: any): any[] {
+  private loadDefaultCityData(params: any) {
+    this.weatherService.getWeatherByCity(this.city, params)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (data: any) => {
+          this.notifications.set(this.formatWeatherNotifications(data));
+        },
+        error: (error) => {
+          console.error('Error al obtener datos de la ciudad por defecto:', error);
+          this.notifications.set([]);
+        }
+      });
+  }
+
+  formatWeatherNotifications(weatherData: any): Notification[] {
     return [
       {
         title: `Clima en ${weatherData.name}`,
-        description: `Temperatura: ${weatherData.main.temp}°C, ${weatherData.weather[0].description}`,
+        description: `Temperatura: ${Math.round(weatherData.main.temp)}°C, ${weatherData.weather[0].description}`,
         type: this.getWeatherAlertType(weatherData.weather[0].main),
         timestamp: new Date()
       }

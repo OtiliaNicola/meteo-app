@@ -6,19 +6,29 @@
 
 <ion-content [fullscreen]="true" class="app-layout__content">
   <div class="notifications__list">
-    <ion-card *ngFor="let notification of notifications" class="notifications__item">
-      <div class="notifications__item-content">
-        <div class="notifications__item-icon">
-          <ion-icon 
-            [name]="getNotificationIcon(notification)"
-            class="notifications__item-icon__icon"></ion-icon>
+    @for (notification of notifications(); track notification.timestamp) {
+      <ion-card class="notifications__item">
+        <div class="notifications__item-content">
+          <div class="notifications__item-icon">
+            <ion-icon 
+              [name]="getNotificationIcon(notification)"
+              class="notifications__item-icon__icon">
+            </ion-icon>
+          </div>
+          <div class="notifications__item-text">
+            <h3 class="notifications__item-title">{{ notification.title }}</h3>
+            <p class="notifications__item-description">{{ notification.description }}</p>
+            <span class="notifications__item-time">{{ notification.timestamp | date:'short' }}</span>
+          </div>
         </div>
-        <div class="notifications__item-text">
-          <h3 class="notifications__item-title">{{ notification.title }}</h3>
-          <p class="notifications__item-description">{{ notification.description }}</p>
-          <span class="notifications__item-time">{{ notification.timestamp | date:'short' }}</span>
-        </div>
+      </ion-card>
+    }
+    
+    @empty {
+      <div class="notifications__empty">
+        <ion-icon name="notifications-outline" class="notifications__empty-icon"></ion-icon>
+        <p class="notifications__empty-text">No hay notificaciones disponibles</p>
       </div>
-    </ion-card>
+    }
   </div>
 </ion-content>
