@@ -15,7 +15,7 @@ import {
   IonLabel,
   IonList,
   IonTitle,
-  IonToolbar
+  IonToolbar,
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import {
@@ -26,7 +26,7 @@ import {
   locationOutline,
   searchCircle,
   searchOutline,
-  trash
+  trash,
 } from 'ionicons/icons';
 import { Subject, debounceTime, distinctUntilChanged, takeUntil } from 'rxjs';
 import { SearchHistoryItem } from 'src/app/core/interfaces/search-history-item.interface';
@@ -65,7 +65,7 @@ export class SearchPage implements OnInit, OnDestroy {
   cityWeather: SearchHistoryItem[] = [];
   defaultImg: string = 'assets/icons/clima.png';
   citySuggestions: WeatherCity[] = [];
-  
+
   private searchTerms = new Subject<string>();
   private destroy$ = new Subject<void>();
 
@@ -83,22 +83,22 @@ export class SearchPage implements OnInit, OnDestroy {
       location,
       grid,
       searchCircle,
-      trash
+      trash,
     });
-    
+
     // Configurar la búsqueda reactiva con debounce
-    this.searchTerms.pipe(
-      takeUntil(this.destroy$),
-      debounceTime(300),
-      distinctUntilChanged()
-    ).subscribe(term => {
-      this.performSearch(term);
-    });
+    this.searchTerms
+      .pipe(takeUntil(this.destroy$), debounceTime(300), distinctUntilChanged())
+      .subscribe((term) => {
+        this.performSearch(term);
+      });
   }
 
   async ngOnInit() {
     try {
-      const storedHistory = await this.storageService.get<SearchHistoryItem[]>('searchHistory');
+      const storedHistory = await this.storageService.get<SearchHistoryItem[]>(
+        'searchHistory'
+      );
       // Verificamos que sea un array y tiene elementos
       this.cityWeather = Array.isArray(storedHistory) ? storedHistory : [];
     } catch (error) {
@@ -106,7 +106,7 @@ export class SearchPage implements OnInit, OnDestroy {
       this.cityWeather = [];
     }
   }
-  
+
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
@@ -119,13 +119,13 @@ export class SearchPage implements OnInit, OnDestroy {
       this.citySuggestions = [];
     }
   }
-  
+
   private performSearch(term: string) {
     if (term.length < 2) {
       this.citySuggestions = [];
       return;
     }
-    
+
     // Llamamos al servicio para obtener las sugerencias de ciudades
     this.searchService.getCitySuggestions(term).subscribe({
       next: (data) => {
@@ -148,12 +148,12 @@ export class SearchPage implements OnInit, OnDestroy {
 
   async searchCity() {
     if (!this.city.trim()) return;
-    
+
     const headers = {
-      units: 'metric',   // Unidades en grados Celsius
-      lang: 'sp',        // Idioma de la respuesta (español)
+      units: 'metric', // Unidades en grados Celsius
+      lang: 'sp', // Idioma de la respuesta (español)
     };
-    
+
     this.searchService.getWeatherByCity(this.city, headers).subscribe({
       next: async (data) => {
         if (data) {
@@ -161,8 +161,13 @@ export class SearchPage implements OnInit, OnDestroy {
 
           try {
             // Recuperamos historial anterior con tipo correcto
-            const history = await this.storageService.get<SearchHistoryItem[]>('searchHistory') || [];
-            const historyArray: SearchHistoryItem[] = Array.isArray(history) ? history : [];
+            const history =
+              (await this.storageService.get<SearchHistoryItem[]>(
+                'searchHistory'
+              )) || [];
+            const historyArray: SearchHistoryItem[] = Array.isArray(history)
+              ? history
+              : [];
 
             // Evitar duplicados
             const cityLower = this.city.toLowerCase();
@@ -178,13 +183,13 @@ export class SearchPage implements OnInit, OnDestroy {
                   ? `https://openweathermap.org/img/wn/${data.weather[0].icon}.png`
                   : this.defaultImg,
               };
-              
+
               // Añadir al principio del array
               historyArray.unshift(newEntry);
 
               // Guardar el historial actualizado
               await this.storageService.set('searchHistory', historyArray);
-              
+
               // Actualizar la vista
               this.cityWeather = [...historyArray];
             }
@@ -203,25 +208,17 @@ export class SearchPage implements OnInit, OnDestroy {
   }
 
   async removeFromHistory(item: SearchHistoryItem) {
-    try {
+    console.log('Toast mostrado');
     
-      
-      // Mostrar el toast antes de eliminar para mejorar la experiencia del usuario
-      this.utilsService.presentToastSuccess(`Ciudad "${item.city}" eliminada`);
-      console.log('Toast mostrado');
-      
-      
-      // Filtrar el elemento del array local
-      this.cityWeather = this.cityWeather.filter(city => 
-        city.city.toLowerCase() !== item.city.toLowerCase()
-      );
-      
-      // Actualizar el almacenamiento local
-      await this.storageService.set('searchHistory', this.cityWeather);
-    } catch (error) {
-      console.error('Error al eliminar ciudad:', error);
-      this.utilsService.presentToastDanger('Error al eliminar la ciudad');
-    }
+    // Filtrar el elemento del array local
+    this.cityWeather = this.cityWeather.filter(
+      (city) => city.city.toLowerCase() !== item.city.toLowerCase()
+    );
+    // Mostrar el toast antes de eliminar para mejorar la experiencia del usuario
+    await this.utilsService.presentToastSuccess(`Ciudad "${item.city}" eliminada`);
+    
+    // Actualizar el almacenamiento local
+    await this.storageService.set('searchHistory', this.cityWeather);
   }
 
   getImage(img: string) {
