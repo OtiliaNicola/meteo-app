@@ -16,7 +16,7 @@ import { UtilsService } from './../../../../core/services/utils.service';
   templateUrl: './feedback.page.html',
   styleUrls: ['./feedback.page.scss'],
   standalone: true,
-  imports: [IonList, IonLabel, IonItemSliding, IonItem, IonCard, IonItemOption, IonItemOptions, IonIcon, 
+  imports: [
     IonContent,
     IonHeader,
     IonTitle,
