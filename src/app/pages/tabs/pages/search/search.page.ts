@@ -214,11 +214,11 @@ export class SearchPage implements OnInit, OnDestroy {
     this.cityWeather = this.cityWeather.filter(
       (city) => city.city.toLowerCase() !== item.city.toLowerCase()
     );
+    // Actualizar el almacenamiento local
+    await this.storageService.set('searchHistory', this.cityWeather);
     // Mostrar el toast antes de eliminar para mejorar la experiencia del usuario
     await this.utilsService.presentToastSuccess(`Ciudad "${item.city}" eliminada`);
     
-    // Actualizar el almacenamiento local
-    await this.storageService.set('searchHistory', this.cityWeather);
   }
 
   getImage(img: string) {
