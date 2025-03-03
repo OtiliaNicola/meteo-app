@@ -6,10 +6,12 @@ import {
   IonContent,
   IonHeader,
   IonTitle,
-  IonToolbar, IonIcon, IonItemOptions, IonItemOption, IonCard, IonItem, IonItemSliding, IonLabel, IonList } from '@ionic/angular/standalone';
+  IonToolbar,
+} from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { arrowBack, searchOutline, trash } from 'ionicons/icons';
 import { UtilsService } from './../../../../core/services/utils.service';
+import { App } from '@capacitor/app';
 
 @Component({
   selector: 'app-feedback',
@@ -28,11 +30,25 @@ import { UtilsService } from './../../../../core/services/utils.service';
 })
 export class FeedbackPage implements OnInit {
   selectedCondition: string = '';
+  appVersion: string = '';
+
   constructor(private readonly utilsService: UtilsService) {
-    addIcons({searchOutline,trash,arrowBack});
+    addIcons({ searchOutline, trash, arrowBack });
   }
 
-  ngOnInit() {}
+  async ngOnInit() {
+    await this.getAppInfo();
+  }
+
+  async getAppInfo() {
+    try {
+      const info = await App.getInfo();
+      this.appVersion = `${info.name} v${info.version}`;
+    } catch (error) {
+      console.error('Error al obtener información de la app:', error);
+      this.appVersion = 'Versión no disponible';
+    }
+  }
 
   selectCondition(condition: string) {
     this.selectedCondition = condition;
@@ -45,6 +61,5 @@ export class FeedbackPage implements OnInit {
       'bottom'
     );
     console.log('Toast mostrado');
-    
   }
 }
