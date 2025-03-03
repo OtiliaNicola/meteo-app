@@ -129,6 +129,7 @@ export class SearchPage implements OnInit, OnDestroy {
     // Llamamos al servicio para obtener las sugerencias de ciudades
     this.searchService.getCitySuggestions(term).subscribe({
       next: (data) => {
+        console.log('Sugerencias recibidas:', data);
         this.citySuggestions = data.slice(0, 5); // Limitamos a 5 sugerencias
       },
       error: (err) => {
@@ -203,8 +204,12 @@ export class SearchPage implements OnInit, OnDestroy {
 
   async removeFromHistory(item: SearchHistoryItem) {
     try {
+    
+      
       // Mostrar el toast antes de eliminar para mejorar la experiencia del usuario
       this.utilsService.presentToastSuccess(`Ciudad "${item.city}" eliminada`);
+      console.log('Toast mostrado');
+      
       
       // Filtrar el elemento del array local
       this.cityWeather = this.cityWeather.filter(city => 

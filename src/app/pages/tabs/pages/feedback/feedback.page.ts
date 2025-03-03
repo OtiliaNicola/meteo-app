@@ -44,5 +44,7 @@ export class FeedbackPage implements OnInit {
       'Gracias por su colaboración!',
       'bottom'
     );
+    console.log('Toast mostrado');
+    
   }
 }
