@@ -62,10 +62,10 @@
   
     <div class="forecast-days">
       @for (hour of hourlyForecast; track hour.dt; let i = $index) {
-        @if (isNewDay(hour.dt_txt, i)) {
-          <h3 class="forecast-days__weekday">{{ hour.dt_txt ? capitalizeFirstLetter(hour.dt_txt | date: 'EEEE') : '' }}</h3>
-        }
         <div class="forecast-days__item">
+          @if (isNewDay(hour.dt_txt, i)) {
+            <h3 class="forecast-days__weekday">{{ hour.dt_txt ? capitalizeFirstLetter(hour.dt_txt | date: 'EEEE') : '' }}</h3>
+          }
           <div class="forecast-days__info">
             <img
               class="forecast-days__icon"
