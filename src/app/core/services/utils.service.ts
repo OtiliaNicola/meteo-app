@@ -26,6 +26,7 @@ export class UtilsService {
     state: string | undefined = undefined,
     duration = 1500
   ): Promise<void> {
+    console.log('🟢 Toast de éxito mostrado');
     const toast = await this.toastController.create({
       message: text,
       duration,
