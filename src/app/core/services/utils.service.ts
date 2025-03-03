@@ -34,7 +34,7 @@ export class UtilsService {
       color: state,
     });
 
-    return await toast.present();
+    await toast.present().catch((e) => e);
   }
 
   async presentToastDanger(
@@ -65,7 +65,7 @@ export class UtilsService {
     text: string,
     position: 'top' | 'middle' | 'bottom' = 'bottom'
   ): Promise<void> {
-    return await this.presentToast(text, position, 'success');
+    await this.presentToast(text, position, 'success').catch((e) => e);
   }
 
   async presentLoading(): Promise<void> {
