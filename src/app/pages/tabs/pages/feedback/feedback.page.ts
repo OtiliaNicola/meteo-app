@@ -12,6 +12,7 @@ import { addIcons } from 'ionicons';
 import { arrowBack, searchOutline, trash } from 'ionicons/icons';
 import { UtilsService } from './../../../../core/services/utils.service';
 import { App } from '@capacitor/app';
+import { Capacitor } from '@capacitor/core';
 
 @Component({
   selector: 'app-feedback',
@@ -42,8 +43,14 @@ export class FeedbackPage implements OnInit {
 
   async getAppInfo() {
     try {
-      const info = await App.getInfo();
-      this.appVersion = `${info.name} v${info.version}`;
+      // Verificar si estamos en un dispositivo nativo
+      if (Capacitor.isNativePlatform()) {
+        const info = await App.getInfo();
+        this.appVersion = `${info.name} v${info.version}`;
+      } else {
+        // En web, usar un valor por defecto o consultar package.json
+        this.appVersion = 'Weather App v1.0.0 (Web)';
+      }
     } catch (error) {
       console.error('Error al obtener información de la app:', error);
       this.appVersion = 'Versión no disponible';
