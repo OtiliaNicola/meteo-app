@@ -219,8 +219,8 @@ export class SearchPage implements OnInit, OnDestroy {
     try{
       // Mostrar el toast antes de eliminar para mejorar la experiencia del usuario
       this.utilsService.presentToastSuccess(`Ciudad "${item.city}" eliminada`);
-    } catch{
-      console.error('error en el toast')
+    } catch (error){
+      console.error('error en el toast', error)
     }
     
   }
