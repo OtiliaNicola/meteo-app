@@ -3,7 +3,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import {
-  IonButton,
   IonCard,
   IonContent,
   IonHeader,
@@ -35,7 +34,6 @@ import { UtilsService } from 'src/app/core/services/utils.service';
   standalone: true,
   imports: [IonLabel, IonList, IonItem, 
     IonInput,
-    IonButton,
     IonCard,
     IonIcon,
     IonContent,
