@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import {
@@ -7,13 +6,15 @@ import {
   IonContent,
   IonHeader,
   IonIcon,
-  IonItem,
   IonInput,
   IonLabel,
   IonTitle,
   IonToolbar,
-  ModalController
+  ModalController,
+  ToastController
 } from '@ionic/angular/standalone';
+import { addIcons } from 'ionicons';
+import { closeOutline } from 'ionicons/icons';
 
 @Component({
   selector: 'app-add-city-modal',
@@ -21,35 +22,42 @@ import {
   styleUrls: ['./add-city-modal.page.scss'],
   standalone: true,
   imports: [
-    IonLabel,
-    IonItem,
-    IonInput,
-    IonIcon,
-    IonButton,
-    IonButtons,
-    IonContent,
     IonHeader,
-    IonTitle,
     IonToolbar,
-    CommonModule,
-    FormsModule,
-  ],
-  providers: [ModalController]
+    IonTitle,
+    IonContent,
+    IonButtons,
+    IonButton,
+    IonIcon,
+    IonInput,
+    IonLabel,
+    FormsModule
+  ]
 })
 export class AddCityModalPage {
   cityName: string = '';
 
-  constructor(private modalCtrl: ModalController) {}
-
-  closeModal() {
-    this.modalCtrl.dismiss({
-      cityName: this.cityName, // Pasamos la ciudad seleccionada
-    });
+  constructor(
+    public modalCtrl: ModalController,
+    private toastController: ToastController
+  ) {
+    addIcons({ closeOutline });
   }
 
-  addCity() {
-    if (this.cityName.trim()) {
-      this.modalCtrl.dismiss(this.cityName);
+  async addCity() {
+    if (this.cityName && this.cityName.trim()) {
+      this.modalCtrl.dismiss({
+        cityName: this.cityName.trim()
+      });
+    } else {
+      // Mostrar un toast con mensaje de error para el usuario
+      const toast = await this.toastController.create({
+        message: 'Por favor, introduce un nombre de ciudad válido',
+        duration: 2000,
+        position: 'bottom',
+        color: 'danger'
+      });
+      await toast.present();
     }
   }
 }

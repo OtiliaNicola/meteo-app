@@ -1,18 +1,31 @@
-<ion-header>
+<ion-header class="modal-header ion-no-border">
   <ion-toolbar>
-    <ion-title>Añadir Ciudad</ion-title>
+    <ion-title color="white">Añadir Ciudad</ion-title>
     <ion-buttons slot="end">
-      <ion-button (click)="closeModal()">
-        <ion-icon name="close"></ion-icon>
+      <ion-button (click)="modalCtrl.dismiss()">
+        <ion-icon name="close-outline" color="white"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
-  <ion-item>
-    <ion-label position="floating">Nombre de la ciudad</ion-label>
-    <ion-input [(ngModel)]="cityName"></ion-input>
-  </ion-item>
-  <ion-button expand="full" (click)="closeModal()">Añadir</ion-button>
+<ion-content class="modal-content">
+  <div class="add-city">
+    <div class="add-city__input-container">
+      <ion-label class="add-city__label">Nombre de la ciudad</ion-label>
+      <ion-input 
+        [(ngModel)]="cityName" 
+        class="add-city__input"
+        placeholder="Ej: Madrid, Barcelona, Valencia..."
+      ></ion-input>
+    </div>
+    
+    <ion-button 
+      expand="block" 
+      (click)="addCity()" 
+      class="add-city__button"
+    >
+      Añadir
+    </ion-button>
+  </div>
 </ion-content>
