@@ -1,4 +1,15 @@
-@if (weatherTime) {
+<!-- Estado de carga -->
+@if (!weatherTime && permissionsChecked) {
+  <ion-content class="app-layout__content">
+    <div class="loading-container">
+      <ion-spinner class="loading-container__spinner" name="bubbles"></ion-spinner>
+      <p class="loading-container__message">Cargando datos del clima...</p>
+    </div>
+  </ion-content>
+}
+
+<!-- Contenido principal -->
+@else if (weatherTime) {
   <ion-header class="app-layout__header ion-no-border">
     <ion-toolbar>
       <ion-buttons slot="start">
@@ -110,13 +121,17 @@
       </div>
     </div>
   </ion-content>
-  }
-  
-  @else {
-    <ion-content class="app-layout__content">
-      <div class="loading-container">
-        <ion-spinner name="bubbles"></ion-spinner>
-        <p>Cargando datos del clima...</p>
-      </div>
-    </ion-content>
-  }
+}
+
+<!-- Estado de error/no disponible -->
+@else {
+  <ion-content class="app-layout__content">
+    <div class="loading-container">
+      <ion-icon name="cloud-offline-outline" class="loading-container__error-icon"></ion-icon>
+      <p class="loading-container__message">No se pudieron cargar los datos del clima.</p>
+      <ion-button  class="loading-container__button" (click)="showPermissionsAlert()">
+        Reintentar
+      </ion-button>
+    </div>
+  </ion-content>
+}

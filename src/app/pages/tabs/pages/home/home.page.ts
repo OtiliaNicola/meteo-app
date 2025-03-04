@@ -4,6 +4,7 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import {
+  AlertController,
   IonButton,
   IonButtons,
   IonCard,
@@ -14,9 +15,11 @@ import {
   IonIcon,
   IonImg,
   IonRow,
+  IonSpinner,
   IonTitle,
   IonToolbar,
-  ModalController, IonSpinner } from '@ionic/angular/standalone';
+  ModalController
+} from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import {
   addOutline,
@@ -25,8 +28,7 @@ import {
   personOutline,
   reload,
   speedometerOutline,
-  waterOutline,
-} from 'ionicons/icons';
+  waterOutline, cloudOfflineOutline } from 'ionicons/icons';
 import { WeatherData } from 'src/app/core/interfaces/weather-data.interface';
 import { WeatherHourly } from 'src/app/core/interfaces/weather-hourly.interface';
 import { WeatherWeekend } from 'src/app/core/interfaces/weather-weekend.interface';
@@ -65,26 +67,27 @@ export class HomePage implements OnInit {
   hourlyForecast?: WeatherHourly;
   weatherData: WeatherData[] = [];
   cities: string[] = [];
+  permissionsChecked = false;
 
   constructor(
     private readonly geolocation: GeolocationService,
     private readonly weatherService: WeatherService,
     private readonly router: Router,
     private readonly modalCtrl: ModalController,
+    private readonly changeDetectorRef: ChangeDetectorRef,
+    private readonly alertController: AlertController
   ) {
-    addIcons({
-      grid,
-      reload,
-      personOutline,
-      waterOutline,
-      speedometerOutline,
-      partlySunnyOutline,
-      addOutline,
-    });
+    addIcons({grid,reload,addOutline,cloudOfflineOutline,personOutline,waterOutline,speedometerOutline,partlySunnyOutline,});
   }
 
-  ngOnInit() {
-    this.getLocationUser();
+  async ngOnInit() {
+    // Mostrar alerta de permisos inmediatamente al cargar la página
+    if (!this.permissionsChecked) {
+      await this.showPermissionsAlert();
+    } else {
+      await this.getLocationUser();
+    }
+    
     const storedCities = localStorage.getItem('cities');
     if (storedCities) {
       this.cities = JSON.parse(storedCities).filter((city: string) => city && city.trim() !== ''); // Filtramos valores vacíos o nulos
@@ -92,45 +95,120 @@ export class HomePage implements OnInit {
     this.getWeatherForMultipleCities(); // Cargar el clima para las ciudades almacenadas
   }
 
+  async showPermissionsAlert() {
+    const alert = await this.alertController.create({
+      header: 'Permisos de ubicación',
+      message: 'Esta aplicación necesita acceder a tu ubicación para mostrar información meteorológica precisa de tu zona. Por favor, acepta los permisos cuando se te soliciten.',
+      cssClass: 'permissions-alert',
+      buttons: [
+        {
+          text: 'Aceptar',
+          handler: () => {
+            this.permissionsChecked = true;
+            
+            // Empezamos a obtener la ubicación con un timeout por si acaso
+            const timeoutPromise = new Promise((_, reject) => {
+              setTimeout(() => reject(new Error('Timeout obteniendo ubicación')), 5000);
+            });
+            
+            // Intentamos obtener la ubicación con un timeout de seguridad
+            Promise.race([
+              this.getLocationUser(),
+              timeoutPromise
+            ]).catch(error => {
+              console.error('Error o timeout al obtener ubicación:', error);
+              this.loadDefaultData();
+            });
+          }
+        }
+      ]
+    });
+  
+    await alert.present();
+  }
+  
   async getLocationUser() {
-    const currentLocation = await this.geolocation.printCurrentPosition();
-    const { lon, lat } = currentLocation;
+    try {
+      const currentLocation = await this.geolocation.printCurrentPosition();
+      const { lon, lat } = currentLocation;
+      const headers = {
+        lon,
+        lat,
+        units: 'metric',
+        lang: 'sp',
+      };
+  
+      this.weatherService
+        .getWeatherByLatAndLon<WeatherData>('weather', headers)
+        .subscribe({
+          next: (data) => {
+            data.main.temp = Math.round(data.main.temp);
+            data.main.feels_like = Math.round(data.main.feels_like);
+            data.main.temp_min = Math.round(data.main.temp_min);
+            data.main.temp_max = Math.round(data.main.temp_max);
+            this.weatherTime = data;
+          },
+          error: (error) => {
+            console.error('Error obteniendo datos del clima:', error);
+            this.loadDefaultData();
+          }
+        });
+  
+      this.weatherService
+        .getWeatherByLatAndLon<WeatherHourly>('forecast', headers)
+        .subscribe({
+          next: (data) => {
+            data.list = data.list.map((item) => ({
+              ...item,
+              dt_txt: new Date(item.dt * 1000).toISOString(),
+              main: {
+                ...item.main,
+                temp: Math.round(item.main.temp),
+                feels_like: Math.round(item.main.feels_like),
+                temp_min: Math.round(item.main.temp_min),
+                temp_max: Math.round(item.main.temp_max),
+              },
+            }));
+  
+            this.hourlyForecast = data;
+          },
+          error: (error) => {
+            console.error('Error obteniendo pronóstico:', error);
+          }
+        });
+    } catch (error) {
+      console.error('Error al obtener la ubicación:', error);
+      // Cargar datos por defecto (Madrid) si hay error
+      this.loadDefaultData();
+      throw error; // Re-lanzar error para el Promise.race
+    }
+  }
+  
+  async loadDefaultData() {
     const headers = {
-      lon,
-      lat,
       units: 'metric',
       lang: 'sp',
     };
-
+    
     this.weatherService
-      .getWeatherByLatAndLon<WeatherData>('weather', headers)
-      .subscribe((data) => {
-        data.main.temp = Math.round(data.main.temp);
-        data.main.feels_like = Math.round(data.main.feels_like);
-        data.main.temp_min = Math.round(data.main.temp_min);
-        data.main.temp_max = Math.round(data.main.temp_max);
-        this.weatherTime = data;
-      });
-
-    this.weatherService
-      .getWeatherByLatAndLon<WeatherHourly>('forecast', headers)
-      .subscribe((data) => {
-        data.list = data.list.map((item) => ({
-          ...item,
-          dt_txt: new Date(item.dt * 1000).toISOString(), // Redondea la hora
-          main: {
-            ...item.main,
-            temp: Math.round(item.main.temp),
-            feels_like: Math.round(item.main.feels_like),
-            temp_min: Math.round(item.main.temp_min),
-            temp_max: Math.round(item.main.temp_max),
-          },
-        }));
-
-        this.hourlyForecast = data;
+      .getWeatherByCity<WeatherData>('Madrid', headers)
+      .subscribe({
+        next: (data) => {
+          data.main.temp = Math.round(data.main.temp);
+          data.main.feels_like = Math.round(data.main.feels_like);
+          data.main.temp_min = Math.round(data.main.temp_min);
+          data.main.temp_max = Math.round(data.main.temp_max);
+          this.weatherTime = data;
+        },
+        error: (error) => {
+          console.error('Error cargando datos por defecto:', error);
+          // Asegurar que weatherTime no sea undefined para evitar problemas de carga
+          if (!this.weatherTime) {
+            this.weatherTime = {} as WeatherData;
+          }
+        }
       });
   }
-
   async openAddCityModal() {
     try {
       const modal = await this.modalCtrl.create({
