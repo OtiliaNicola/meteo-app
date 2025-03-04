@@ -19,8 +19,8 @@
   </div>
   
   <div *ngIf="citySuggestions.length > 0" class="suggestions-dropdown">
-    <ion-list>
-      <ion-item *ngFor="let suggestion of citySuggestions" (click)="selectCity(suggestion)">
+    <ion-list lines="none">
+      <ion-item *ngFor="let suggestion of citySuggestions" (click)="selectCity(suggestion)" >
         <ion-label>{{ suggestion.name }}, {{ suggestion.country }}</ion-label>
       </ion-item>
     </ion-list>

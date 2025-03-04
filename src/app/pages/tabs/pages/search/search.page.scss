@@ -50,6 +50,7 @@ ion-buttons {
   overflow-y: auto;
   left: 20px;
   right: 20px;
+  top: 85px;
   
   ion-list {
     padding: 0;
@@ -74,6 +75,7 @@ ion-buttons {
     margin-bottom: 15px;
     border-radius: 16px;
     overflow: hidden;
+    box-sizing: none !important;
   }
   
   ion-item {
