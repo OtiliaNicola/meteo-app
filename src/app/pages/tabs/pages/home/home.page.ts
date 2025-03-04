@@ -81,18 +81,23 @@ export class HomePage implements OnInit {
   }
 
   async ngOnInit() {
-    // Mostrar alerta de permisos inmediatamente al cargar la página
-    if (!this.permissionsChecked) {
+    // Verificar si ya se han mostrado los permisos anteriormente
+    const permissionsAlreadyShown = localStorage.getItem('permissionsShown');
+    
+    if (!permissionsAlreadyShown) {
+      // Solo mostrar la alerta si nunca se ha mostrado
       await this.showPermissionsAlert();
     } else {
-      await this.getLocationUser();
+      // Si ya se han mostrado los permisos, intentar obtener la ubicación directamente
+      this.permissionsChecked = true;
+      this.getLocationUser();
     }
     
     const storedCities = localStorage.getItem('cities');
     if (storedCities) {
-      this.cities = JSON.parse(storedCities).filter((city: string) => city && city.trim() !== ''); // Filtramos valores vacíos o nulos
+      this.cities = JSON.parse(storedCities).filter((city: string) => city && city.trim() !== '');
     }
-    this.getWeatherForMultipleCities(); // Cargar el clima para las ciudades almacenadas
+    this.getWeatherForMultipleCities();
   }
 
   async showPermissionsAlert() {
@@ -104,6 +109,7 @@ export class HomePage implements OnInit {
         {
           text: 'Aceptar',
           handler: () => {
+            localStorage.setItem('permissionsShown', 'true');
             this.permissionsChecked = true;
             
             // Empezamos a obtener la ubicación con un timeout por si acaso
@@ -122,8 +128,7 @@ export class HomePage implements OnInit {
           }
         }
       ]
-    });
-  
+    }); 
     await alert.present();
   }
   
